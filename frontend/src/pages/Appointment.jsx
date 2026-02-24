@@ -89,14 +89,18 @@ const Appointment = () => {
     
         return times;
     };
-
+console.log(data);
     if(patientId !== 0){
         return loaded && (
             <div>
                 {/*----------Doctor details----------*/}
                 <div className='flex flex-col sm:flex-row gap-4'>
                     <div>
-                        <img className='bg-primary w-full sm:max-w-72 rounded-lg' src={assets[`doc${(data[0].doctor_id % 15)}`]} alt=""/>
+                        <img className='bg-primary w-full sm:max-w-72 rounded-lg' src={
+                data[0].profile_photo
+                ? `http://localhost:8081/${data[0].profile_photo}`
+                : '/default-doctor.png'
+            } alt=""/>
                     </div>
 
                     <div className='flex-1 border border-gray-400 rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0'>
@@ -106,7 +110,7 @@ const Appointment = () => {
                             <img className='w-6' src={assets.verified} alt=""/>
                         </p>
                         <div className='flex items-center gap-2 text-sm mt-1 text-gray-600'>
-                            <p>Degree: MBBS {data[0].specialization}</p>
+                            <p>Speciality: {data[0].specialization}</p>
                             <button className='py-0.5 px-2 border text-xs rounded-full'>{data[0].years_of_experience} years</button>
                         </div>
                         <div>
@@ -120,11 +124,8 @@ const Appointment = () => {
                             <p className='flex items-center gap-1 text-sm font-medium text-gray-900 mt-3'>
                                 About <img className='w-4' src={assets.info} alt=""/>
                             </p>
-                            <p className='text-sm text-gray-500 max-w-[700px] mt-1'>Dr. {data[0].first_name} {data[0].last_name} is a dedicated cardiologist with over 10 years of experience in the field of cardiovascular medicine. He graduated from Harvard Medical School, where he earned his Doctor of Medicine (MD) degree, and completed his residency at Johns Hopkins Hospital, specializing in internal medicine.</p>
+                            <p className='text-sm text-gray-500 max-w-[700px] mt-1'>Dr. {data[0].first_name} {data[0].last_name} is a dedicated {data[0].specialization} with over {data[0].years_of_experience} years of experience. Dr. {data[0].first_name} {data[0].last_name} has {data[0].avg_rating} average rating, reviwed by patients</p>
                         </div>
-                        <p className='text-gray-500 font-medium mt-4'>
-                            Appointment Fee: <span className='text-gray-600'>₹750</span>
-                        </p>
                     </div>
                 </div>
                 

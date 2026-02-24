@@ -7,7 +7,27 @@ const Header = () => {
       
     return (
         <div>
-            <img className='rounded-xl' src={assets.background}/>
+<div 
+  className="relative flex justify-center w-full"
+  style={{ height: "auto" }}
+>
+  {/* Background Image */}
+  <img 
+    className="rounded-xl h-auto w-full md:h-[500px]" 
+    src={assets.banner4} 
+    alt=""
+  />
+
+  {/* Text Overlay */}
+<div className="absolute bottom-0 left-0 text-white flex flex-col" style={{ backgroundColor: "rgba(0,0,0,0.5)", width: "75%", padding: "5px", borderRadius: "0px 20px 0px 20px" }} >    <h1 className="text-white text-2xl md:text-4xl font-bold" >
+      <p>Symptoms-Based Doctor Recommendation <br /> and Appointment System </p>
+    {/*<p>"Your symptoms, our guidance, the right specialist."</p>*/}  
+    </h1>
+    <p>"Smart symptom analysis, your disease insights, our guidance, the right specialist."</p>
+    </div>
+</div>
+
+
             <br></br>
 {/*-----------------Symptoms-confusion-----------------*/}
             <div className='flex flex-col md:flex-row flex-wrap bg-primary rounded-lg px-6 md:px-10 lg:px-20'>

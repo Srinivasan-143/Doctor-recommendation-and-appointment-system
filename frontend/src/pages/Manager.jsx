@@ -129,12 +129,13 @@ const Manager = () => {
 
 
 
+
     if (st == null) {
         return (
         <div className="p-8 space-y-8">
-            <h2 className="text-xl font-bold mb-4">Login</h2>
+            <h2 className="text-xl font-bold mb-4"> Admin Login</h2>
             <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); authenticate(); }}>
-            <p>Username</p>
+            <p>AdminName</p>
             <input type="text" name="username" value={credentials.username} onChange={(e) => setCredentials({ ...credentials, username: e.target.value })} className="w-full p-2 border rounded" required />
             <p>Password</p>
             <input type="password" name="password" value={credentials.password} onChange={(e) => setCredentials({ ...credentials, password: e.target.value })} className="w-full p-2 border rounded" required />

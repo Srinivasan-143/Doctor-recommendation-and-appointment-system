@@ -37,6 +37,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
         className="logo-img"
         src={assets.fullLogo}
         alt="logo"
+        style={{height:'50px', width:"auto"}}
       />
 
       {/* Desktop Nav */}

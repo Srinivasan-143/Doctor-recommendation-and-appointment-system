@@ -63,7 +63,11 @@ const Doctors = () => {
                             <br/>
                             <img
                                 className='bg-blue-50 w-80 h-100 rounded-xl'
-                                src={assets[`doc${(item.doctor_id % 15)}`]}
+                                src={
+                item.profile_photo
+                ? `http://localhost:8081/${item.profile_photo}`
+                : '/default-doctor.png'
+            }
                                 alt={`${item.first_name} ${item.last_name}`}                            />
                             <div className='p-4'>
                                 <p>Doctor Id: {item.doctor_id}</p>

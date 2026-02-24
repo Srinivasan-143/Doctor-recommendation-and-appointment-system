@@ -1,4 +1,5 @@
 import background from './background.jpg'
+import banner4 from './banner3.webp'
 import logo from './logo.png'
 import doc1 from './doc1.jpg'
 import doc2 from './doc2.jpg'
@@ -21,7 +22,7 @@ import gynecologist from './gynecologist.png'
 import neurologist from './neurologist.png'
 import dermatologist from './dermatologist.png'
 import pediatrician from './pediatrician.png'
-import fullLogo from './full_logo.png'
+import fullLogo from './logo.png'
 import profile from './profile.jpg'
 import dropdown from './dropdown.png'
 import doctors from './doctors.png'
@@ -39,6 +40,7 @@ import crossicon from './cross_icon.png'
 
 export const assets = {
     background,
+    banner4,
     logo,
     doc1,
     doc2,

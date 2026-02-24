@@ -12,10 +12,17 @@ const About = () => {
             <div className='flex flex-col my-10 md:flex-row gap-12'>
                 <img className='w-full md:max-w-[360-px]' src={assets.about} alt=''/>
                 <div className='flex flex-col justify-center gap-6 md:w-3/4 text-sm text-gray-600'>
-                    <p>Unity Care is dedicated to providing exceptional healthcare services with a patient-centered approach. Our team of highly skilled doctors, nurses, and support staff is committed to ensuring the well-being and recovery of every individual who walks through our doors. </p>
-                    <p>At Unity Care, we combine advanced medical technology with a personalized touch to meet the unique needs of our patients. We believe in fostering a healing environment where everyone feels valued, respected, and cared for, making healthcare a seamless and comforting experience.</p>
+                    <p>The Symptoms-Based Doctor Recommendation and Appointment System is an innovative centralized platform that leverages machine learning to recommend doctors by finding the possible disease based on patient-provided symptoms and streamline appointment scheduling with specialists. It is designed with a special focus on recommending top doctors by rating and review by the patients, Overall it reduces time complexity of finding the right specialist and appointments flow</p>
                     <b className='text-gray-800'>Our Vision</b>
-                    <p>Our vision is to be a beacon of excellence in healthcare, where innovation, compassion, and integrity drive every decision. We aim to lead the way in patient care by constantly evolving, embracing new technologies, and ensuring that everyone who comes to Unity Care receives the best possible treatment and support, regardless of their background.</p>
+                    <p><b>Symptom-Driven Recommendations: </b>Patients input their symptoms, and the system intelligently detects possible disease and suggests suitable specialists.
+                    <br />
+<b>Seamless Appointment Booking:</b> Integrated scheduling with suggested specialists.
+<br />
+<b>Role-based access control :</b>provides Role based control for patients,doctors and admin.
+<br />
+<b>Inclusive Design:</b> Simple, user-friendly interface tailored for first-time digital healthcare users.
+<br />
+<b>Scalable Architecture:</b> Built to expand across regions and handle growing patient-doctor networks efficiently.</p>
                 </div>
             </div>
 

@@ -23,7 +23,7 @@ const Doctorprofile = () => {
             if (result.length > 0) {
               setData(result[0]);
               setLoaded(true);
-            }
+            } 
           })
           .catch(err => console.log(err));
       }, [doctorId]);
@@ -41,7 +41,7 @@ const Doctorprofile = () => {
         <div className='max-w-lg flex flex-col gap-2 text-xl'>
             
             {/*<img className='w-64 rounded-md' src={assets[`doc${doctorId}`]}
-                                            alt="doctorimage" /> */}
+                                            alt="doctorimage" /> */} 
             <img
             className="w-64 rounded-md"
             src={
