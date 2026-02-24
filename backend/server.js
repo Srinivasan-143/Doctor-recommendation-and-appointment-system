@@ -50,7 +50,6 @@ app.get('/doctors', (request, result) => {
 })
 
 
-
 app.get('/doctors/:id', (request, result) => {
     const doctorId = request.params.id;
     const sql = "SELECT * FROM Doctor WHERE doctor_id = ?"
@@ -715,7 +714,7 @@ app.get('/doctors/specialization/:specialization', (req, res) => {
 
     const sql = `
         SELECT doctor_id, first_name, last_name, specialization, avg_rating, total_reviews,
-               available_days, available_from, available_to, years_of_experience
+               available_days, available_from, available_to, years_of_experience,profile_photo
         FROM Doctor
         WHERE specialization = ?
         ORDER BY avg_rating DESC, total_reviews DESC`;
