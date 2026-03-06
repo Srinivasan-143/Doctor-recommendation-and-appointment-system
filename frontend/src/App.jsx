@@ -7,7 +7,6 @@ import MyAppointments from './pages/MyAppointments'
 import Appointment from './pages/Appointment'
 import MyProfile from './pages/MyProfile'
 import Navbar from './components/Navbar'
-import Footer from './components/Footer'
 import Manager from './pages/Manager'
 import { Route, Routes } from 'react-router-dom'
 import DoctorLogin from './pages/Doctorlogin'
@@ -82,7 +81,6 @@ const App = () => {
                   
                     } />
             </Routes>
-            <Footer/>
         </div>
     )
 }

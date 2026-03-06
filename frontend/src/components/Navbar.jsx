@@ -64,7 +64,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
       <div className="profile-section">
         {token && patientId ? (
           <div className="profile-dropdown">
-            <img className="profile-img" src={assets.profile} alt="" />
+            <img className="profile-img" src={assets.userImage1} alt="" />
             <img className="dropdown-icon" src={assets.dropdown} alt="" />
             <div className="dropdown-menu">
               <p onClick={() => navigate("/my-profile")}>My Profile</p>
@@ -104,7 +104,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
       <div className="profile-section">
         {token && doctorId && (
           <div className="profile-dropdown">
-            <img className="profile-img" src={assets.profile} alt="" />
+            <img className="profile-img" src={assets.userImage1} alt="" />
             <img className="dropdown-icon" src={assets.dropdown} alt="" />
             <div className="dropdown-menu">
               <p onClick={() => navigate(`/doctorprofile/${doctorId}`)}>My Profile</p>

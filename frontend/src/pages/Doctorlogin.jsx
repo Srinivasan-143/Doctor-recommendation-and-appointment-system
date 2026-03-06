@@ -17,20 +17,20 @@ const [doctorIdInput, setDoctorIdInput] = useState("");
     const res = await fetch("http://localhost:8081/loginDoctor", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ doctorId : doctorIdInput, password })
+      body: JSON.stringify({ email : doctorIdInput, password })
     });
     const data = await res.json();
 
     if (data.success) {
   alert("Login successful!");
-  setDoctorId(doctorIdInput); // update context 
+  setDoctorId(data.doctorId); // update context 
   setToken(true); // update context
   setPatientId(null);
   {/*localStorage.setItem("doctorId", doctorId);
   localStorage.setItem("token", "true");
   localStorage.removeItem("patientId"); */}
   // clear patient if doctor logs in
-  navigate(`/doctorlogin/${doctorIdInput}`);
+  navigate(`/doctorlogin/${data.doctorId}`);
 } else {
   alert("Invalid credentials");
 }
@@ -47,10 +47,10 @@ const [doctorIdInput, setDoctorIdInput] = useState("");
             <button onClick={handlesignup} className="bg-primary text-white p-2 rounded" >Signup as Doctor</button>
             </div>
       <div  className="space-y-4">
-        <p>Doctor ID :</p>
+        <p>Doctor Email ID :</p>
       <input
-        type="text"
-        placeholder="Doctor ID"
+        type="email"
+        placeholder="Enter your Email ID"
         value={doctorIdInput}
         onChange={(e) => setDoctorIdInput(e.target.value)}
         className="w-full p-2 border rounded"

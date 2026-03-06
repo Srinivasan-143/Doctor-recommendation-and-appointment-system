@@ -33,7 +33,9 @@ import banner from './banner.png'
 import verified from './verified.png'
 import info from './info.png'
 import about from './about.jpg'
-import userImage from './user_image.jpg'
+import userImage from './user11.webp'
+import userImage1 from './user10.webp'
+
 import symptomps from './symptom-confusion.png'
 import menuicon from './menu_icon.png'
 import crossicon from './cross_icon.png'
@@ -75,6 +77,7 @@ export const assets = {
     info,
     about,
     userImage,
+    userImage1,
     symptomps,
     menuicon,
     crossicon

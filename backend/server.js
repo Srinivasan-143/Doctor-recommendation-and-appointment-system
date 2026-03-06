@@ -1,6 +1,7 @@
 const express = require('express')
 const mysql = require('mysql2');
 const cors = require('cors')
+const bcrypt = require('bcrypt');
 //ml - prediction
 const { getPrediction } = require("./mlService");
 
@@ -18,6 +19,19 @@ const storage = multer.diskStorage({
         cb(null, uniqueName);
     }
 });
+
+// patient image storage
+const patientStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/patients');
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = `patient_${Date.now()}${path.extname(file.originalname)}`;
+        cb(null, uniqueName);
+    }
+});
+
+const uploadPatient = multer({ storage: patientStorage });
 
 const upload = multer({ storage });
 
@@ -90,8 +104,126 @@ app.get('/newPatientId', (request, result) => {
 })
 
 
+// patient signup
 
+const saltRounds = 10; // can adjust, 10-12 is good
 
+app.post(
+  "/newPatientDetails",
+  uploadPatient.single("profilePhoto"),
+  async (req, res) => {
+    const {
+      id,
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+      address,
+      phoneNumber,
+      email,
+      bloodType,
+      emergencyContact,
+      allergies,
+      medicalConditions,
+      password,
+    } = req.body;
+
+    try {
+      // 🔐 hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const profilePhoto = req.file
+        ? `uploads/patients/${req.file.filename}`
+        : null;
+
+      const sql1 = `
+        INSERT INTO patient 
+        (patient_id, first_name, last_name, date_of_birth, gender, address,
+         phone_number, email, blood_type, emergency_contact, allergies,
+         existing_conditions , profile_photo)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      {/*const sql2 = `INSERT INTO login (patient_id, password) VALUES (?, ?)`;*/}
+      const sql2 = `INSERT INTO login (patient_id, email, password) VALUES (?, ?, ?)`;
+      
+
+      db.query(
+        sql1,
+        [
+          id,
+          firstName,
+          lastName,
+          dateOfBirth,
+          gender,
+          address,
+          phoneNumber,
+          email,
+          bloodType,
+          emergencyContact,
+          allergies,
+          medicalConditions,
+          profilePhoto,
+        ],
+        (err) => {
+          if (err) return res.status(500).json(err);
+
+          db.query(sql2, [id, email, hashedPassword], (err) => {
+            if (err) return res.status(500).json(err);
+
+            res.status(201).json({ success: true });
+          });
+        }
+      );
+    } catch (err) {
+      res.status(500).json({ error: "Password hashing failed" });
+    }
+  }
+);
+
+{/*
+app.post(
+  "/newPatientDetails",
+  uploadPatient.single("profilePhoto"),
+  (request, result) => {
+
+    const sql = `
+      INSERT INTO patient 
+      (patient_id, first_name, last_name, date_of_birth, gender, address,
+       phone_number, email, blood_type, emergency_contact, allergies,
+       medical_conditions, profile_photo)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const sql2 = "INSERT INTO login VALUES (?, ?)";
+
+    const {
+      id, firstName, lastName, dateOfBirth, gender,
+      address, phoneNumber, email, bloodType,
+      emergencyContact, allergies, medicalConditions, password
+    } = request.body;
+
+    const profilePhoto = req.file
+      ? `uploads/patients/${req.file.filename}`
+      : null;
+
+    db.query(sql, [
+      id, firstName, lastName, dateOfBirth, gender,
+      address, phoneNumber, email, bloodType,
+      emergencyContact, allergies, medicalConditions,
+      profilePhoto
+    ], (err) => {
+      if (err) return result.status(500).json(err);
+    });
+
+    db.query(sql2, [id, password], (err) => {
+      if (err) return result.status(500).json(err);
+    });
+
+    result.status(201).json("success");
+});
+*/}
+{/*
 app.post('/newPatientDetails', (request, result) => {
     const sql = "INSERT INTO Patient VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const sql2 = "INSERT INTO Login VALUES (?, ?)";
@@ -126,9 +258,104 @@ app.post('/newPatientDetails', (request, result) => {
 
     return result.status(201).json("success")
 })
+*/}
+
+//update patientphoto
+app.put(
+  "/updatePatientPhoto/:id",
+  uploadPatient.single("profilePhoto"),
+  (req, res) => {
+
+    const { id } = req.params;
+
+    if (!req.file) {
+      return res.status(400).json({ message: "No image uploaded" });
+    }
+
+    const photoPath = `uploads/patients/${req.file.filename}`;
+
+    const sql = `
+      UPDATE patient
+      SET profile_photo = ?
+      WHERE patient_id = ?
+    `;
+
+    db.query(sql, [photoPath, id], (err) => {
+      if (err) return res.status(500).json(err);
+      res.json({ message: "Profile image updated successfully!" });
+    });
+});
+
+//verify hashed password
+app.get('/loginPatientDetails/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = `
+    SELECT patient_id, name, email, phone, age
+    FROM patient
+    WHERE patient_id = ?
+  `;
+
+  db.query(sql, [id], (err, data) => {
+    if (err) return res.status(500).json(err);
+    if (data.length === 0) return res.json(null);
+    res.json(data[0]);
+  });
+});
 
 
+{/*app.post("/loginPatient", (req, res) => {
+  {/*const { patientId, password } = req.body;
 
+  const sql = "SELECT password FROM login WHERE patient_id = ?";
+  const { email, password } = req.body;
+
+  const sql = "SELECT patient_id, password FROM login WHERE email = ?";
+  db.query(sql, [patientId], async (err, data) => {
+    if (err) return res.status(500).json({ success: false });
+    if (data.length === 0)
+      return res.json({ success: false });
+
+    const match = await bcrypt.compare(password, data[0].password);
+
+    if (!match)
+      return res.json({ success: false });
+
+    res.json({ success: true, patientId });
+    {/*patientId: data[0].patient_id
+  });
+});
+*/}
+
+app.post("/loginPatient", (req, res) => {
+  const { email, password } = req.body;
+
+  const sql = `
+    SELECT login.password, login.patient_id 
+    FROM login
+    JOIN patient ON login.patient_id = patient.patient_id
+    WHERE patient.email = ?
+  `;
+
+  db.query(sql, [email], async (err, data) => {
+    if (err) return res.status(500).json({ success: false });
+
+    if (data.length === 0)
+      return res.json({ success: false });
+
+    const match = await bcrypt.compare(password, data[0].password);
+
+    if (!match)
+      return res.json({ success: false });
+
+    res.json({
+      success: true,
+      patientId: data[0].patient_id
+    });
+  });
+});
+
+{/*
 app.get('/loginPatientDetails/:id', (request, result) => {
     const patientId = request.params.id;
     const sql = "SELECT password FROM Login WHERE patient_id = ?"
@@ -141,8 +368,7 @@ app.get('/loginPatientDetails/:id', (request, result) => {
         }
     })
 })
-
-
+*/}
 
 app.post('/bookAppointment', (request, result) => {
 
@@ -190,9 +416,10 @@ app.post('/bookAppointment', (request, result) => {
                 if (err) {
                     return result.status(500).json(err);
                 }
+                return result.status(201).json("success");
+
             })
 
-        return result.status(201).json("success");
     })
 })
 
@@ -247,6 +474,43 @@ const formatDate = (dateStr) => { if (!dateStr) return null; return dateStr.spli
 });
 
 // Update patient password
+app.put('/updatePassword/:id', async (req, res) => {
+  const { id } = req.params;
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ message: 'Password is required' });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  const sql = `UPDATE login SET password = ? WHERE patient_id = ?`;
+
+  db.query(sql, [hashedPassword, id], (err) => {
+    if (err) return res.status(500).json(err);
+    res.json({ message: 'Password updated successfully!' });
+  });
+});
+{/*}
+app.put('/updatePassword/:id', async (req, res) => {
+  const { id } = req.params;
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ message: 'Password is required' });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  const sql = `UPDATE login SET password = ? WHERE patient_id = ?`;
+
+  db.query(sql, [hashedPassword, id], (err) => {
+    if (err) return res.status(500).json(err);
+    res.json({ message: 'Password updated successfully!' });
+  });
+});
+*/}
+{/*
 app.put('/updatePassword/:id', (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
@@ -262,7 +526,7 @@ app.put('/updatePassword/:id', (req, res) => {
     res.json({ message: 'Password updated successfully!' });
   });
 });
-
+*/}
 
 app.get('/patientAppointments/:id', (request, result) => {
     const patientId = request.params.id;
@@ -332,92 +596,76 @@ app.delete('/deleteDoctor/:id', (request, result) => {
     })
 })
 
-//app.post('/doctorsignup', (request, result) => {
-/*app.post('/doctorsignup', upload.single('profilePhoto'), (request, result) => {
+//doctor signup
 
+app.post('/doctorsignup', upload.single('profilePhoto'), async (req, res) => {
+  try {
     const {
-        doctorId,
-        firstName,
-        lastName,
-        specialization,
-        phoneNumber,
-        email,
-        availableDays,
-        availableFrom,
-        availableTo,
-        yearsOfExperience,
-        salary,
-        password
-    } = request.body;
+      doctorId,
+      firstName,
+      lastName,
+      specialization,
+      phoneNumber,
+      email,
+      availableDays,
+      availableFrom,
+      availableTo,
+      yearsOfExperience,
+      salary,
+      password
+    } = req.body;
 
-    const profilePhoto = request.file
-    ? `uploads/doctors/${request.file.filename}`
-    : null; */
-    /*
-    app.post('/doctorsignup', upload.single('profilePhoto'), (request, result) => {
-  const {
-    doctorId,
-    firstName,
-    lastName,
-    specialization,
-    phoneNumber,
-    email,
-    availableDays,
-    availableFrom,
-    availableTo,
-    yearsOfExperience,
-    salary,
-    password
-  } = request.body;
+    // 🔐 HASH PASSWORD HERE
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  // ✅ IMPORTANT FIX
-  const profilePhoto = request.file
-    ? request.file.filename
-    : null;
+    const profilePhoto = req.file
+      ? `uploads/doctors/${req.file.filename}`
+      : null;
 
-    // Step 1: Insert into doctor table with manual doctorId
     const doctorSql = `
-  INSERT INTO doctor
-  (doctor_id, first_name, last_name, specialization, phone_number, email,
-   available_days, available_from, available_to, years_of_experience, salary, profile_photo)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-`;
+      INSERT INTO doctor 
+      (doctor_id, first_name, last_name, specialization, phone_number, email,
+       available_days, available_from, available_to, years_of_experience, salary, profile_photo)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-const doctorValues = [
-  doctorId,
-  firstName,
-  lastName,
-  specialization,
-  phoneNumber,
-  email,
-  availableDays,
-  availableFrom,
-  availableTo,
-  yearsOfExperience,
-  salary,
-  profilePhoto
-];
+    const doctorValues = [
+      doctorId,
+      firstName,
+      lastName,
+      specialization,
+      phoneNumber,
+      email,
+      availableDays,
+      availableFrom,
+      availableTo,
+      yearsOfExperience,
+      salary,
+      profilePhoto
+    ];
 
     db.query(doctorSql, doctorValues, (err) => {
-        if (err) {
-            console.error("Error inserting doctor:", err);
-            return result.status(500).json({ message: "Doctor insert error", error: err.sqlMessage });
-        }
+      if (err) return res.status(500).json({ message: "Doctor insert error" });
 
-        // Step 2: Insert into doctorlogin table
-        const loginSql = "INSERT INTO doctorlogin (doctor_id, password) VALUES (?, ?)";
-        db.query(loginSql, [doctorId, password], (err2) => {
-            if (err2) {
-                console.error("Error inserting doctor login:", err2);
-                return result.status(500).json({ message: "Login insert error", error: err2.sqlMessage });
-            }
+      {/*const loginSql =
+        "INSERT INTO doctorlogin (doctor_id, password) VALUES (?, ?)";*/}
 
-            return result.status(201).json({ message: "Doctor added successfully", doctorId });
-        });
+      const loginSql =
+  "INSERT INTO doctorlogin (doctor_id, email, password) VALUES (?, ?, ?)";
+
+      // ✅ STORE HASHED PASSWORD
+      db.query(loginSql, [doctorId, email, hashedPassword], (err2) => {
+        if (err2) return res.status(500).json({ message: "Login insert error" });
+
+        res.status(201).json({ message: "Doctor added successfully" });
+      });
     });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
-*/
 
+{/*}
 app.post('/doctorsignup', upload.single('profilePhoto'), (req, res) => {
   const {
     doctorId,
@@ -479,7 +727,7 @@ app.post('/doctorsignup', upload.single('profilePhoto'), (req, res) => {
     });
   });
 });
-
+*/}
 
 app.post('/addDoctor', (request, result) => {
 
@@ -512,8 +760,64 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     })
 
 })
+//doctor login
+
+{/*app.post('/loginDoctor', (req, res) => {
+  const { doctorId, password } = req.body;
+
+  const sql = "SELECT password FROM doctorlogin WHERE doctor_id = ?";
+
+  db.query(sql, [doctorId], async (err, data) => {
+    if (err) return res.status(500).json(err);
+    if (data.length === 0) {
+      return res.status(401).json({ success: false });
+    }
+
+    // 🔍 Compare entered password with hashed password
+    const isMatch = await bcrypt.compare(password, data[0].password);
+
+    if (!isMatch) {
+      return res.status(401).json({ success: false });
+    }
+
+    // ✅ LOGIN SUCCESS
+    res.json({ success: true, doctorId });
+  });
+});
+*/}
+
+app.post('/loginDoctor', (req, res) => {
+  const { email, password } = req.body;
+
+  const sql = `
+    SELECT dl.password, d.doctor_id
+    FROM doctorlogin dl
+    JOIN doctor d ON dl.doctor_id = d.doctor_id
+    WHERE d.email = ?
+  `;
+
+  db.query(sql, [email], async (err, data) => {
+    if (err) return res.status(500).json(err);
+
+    if (data.length === 0) {
+      return res.json({ success: false });
+    }
+
+    const match = await bcrypt.compare(password, data[0].password);
+
+    if (!match) {
+      return res.json({ success: false });
+    }
+
+    res.json({
+      success: true,
+      doctorId: data[0].doctor_id
+    });
+  });
+});
 
 
+{/*}
 app.post('/loginDoctor', (req, res) => {
     const { doctorId, password } = req.body;
     const sql = "SELECT * FROM DoctorLogin WHERE doctor_id = ? AND password = ?";
@@ -526,14 +830,14 @@ app.post('/loginDoctor', (req, res) => {
         }
     });
 });
-
+*/}
 //fetch appoinments for doctor
 app.get('/doctorlogin/:id', (req, res) => {
     const doctorId = req.params.id;
 
     const sql = `
         SELECT a.appointment_id, a.patient_id, a.doctor_id, a.appointment_date,a.appointment_time,a.appointment_reason,a.status,
-               p.patient_id, p.first_name, p.last_name,p.gender,p.address,p.phone_number,p.email,p.existing_conditions,p.allergies
+               p.patient_id, p.first_name, p.last_name,p.gender,p.address,p.phone_number,p.email,p.existing_conditions,p.allergies,p.profile_photo
         FROM Appointment a
         JOIN Patient p ON a.patient_id = p.patient_id
         WHERE a.doctor_id = ?
@@ -608,6 +912,30 @@ app.put('/updateDoctorDetails/:id', (req, res) => {
 
 
 // Update doctor password
+
+app.put('/updateDoctorPassword/:id', async (req, res) => {
+  const { id } = req.params;
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ message: 'Password is required' });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const sql = `UPDATE doctorlogin SET password = ? WHERE doctor_id = ?`;
+
+    db.query(sql, [hashedPassword, id], (err) => {
+      if (err) return res.status(500).json(err);
+      res.json({ message: 'Doctor password updated successfully!' });
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+{/*}
 app.put('/updateDoctorPassword/:id', (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
@@ -623,7 +951,7 @@ app.put('/updateDoctorPassword/:id', (req, res) => {
     res.json({ message: 'Password updated successfully!' });
   });
 });
-
+*/}
 // Get all patients
 app.get('/allPatients', (req, res) => {
   db.query('SELECT patient_id, first_name, last_name, email, phone_number FROM patient', (err, result) => {

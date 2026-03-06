@@ -43,7 +43,18 @@ const Doctorappointments = () => {
     }
 };
 
+const formatTime = (time) => {
+        if (!time) return "";
 
+        const [hours, minutes] = time.split(":");
+        let h = parseInt(hours);
+        const ampm = h >= 12 ? "PM" : "AM";
+
+        h = h % 12;
+        h = h ? h : 12; // 0 becomes 12
+
+        return `${h}:${minutes} ${ampm}`;
+        };
     
     return loaded && (
         <div>
@@ -55,14 +66,21 @@ const Doctorappointments = () => {
                             
                             <div className='flex-1 text-lg text-zinc-600'>
                                 <p className='text-neutral-800 font-semibold'>Appointment ID: {item.appointment_id}</p>
+                                <img
+                                src={item.profile_photo ? `http://localhost:8081/${item.profile_photo}` : assets.userImage}
+                                alt="Patient"
+                                className="w-16 h-16 rounded-full object-cover mb-2"
+                                 />
                                 <p>Patient ID: {item.patient_id}</p>
                                 <p>Patient Name: {item.first_name + " "+ item.last_name}</p>
                                 <p>Gender: {item.gender}</p>
                                 <p>Phone Number: {item.phone_number}</p>
                                 <p>Email : {item.email}</p>
                                 <p>Existing Conditions : {item.existing_conditions}</p>
-                                <p>Appointment Date: {item.appointment_date}</p>
-                                <p>Appointment Time: {item.appointment_time}</p>
+                                <p>Appointment Date: {new Date(item.appointment_date).toLocaleDateString()}</p>
+                                
+                                <p>Appointment Time: {formatTime(item.appointment_time)}</p>
+                                
                                 <p>Appointment Reason: {item.appointment_reason}</p>
                                 <p className='text-zinc-700 font-medium mt-1'>Appointment Status: {item.status}</p>
                             </div>

@@ -25,6 +25,20 @@ const Appointment = () => {
 
     const {patientId} = useContext(AppContext)
 
+      const formatTime = (time) => {
+        if (!time) return "";
+
+        const [hours, minutes] = time.split(":");
+        let h = parseInt(hours);
+        const ampm = h >= 12 ? "PM" : "AM";
+
+        h = h % 12;
+        h = h ? h : 12; // 0 becomes 12
+
+        return `${h}:${minutes} ${ampm}`;
+        };
+
+
     const handleScheduleAppointment = async () => {
         const submittedData = {
             patient_id: patientId,
@@ -118,8 +132,9 @@ console.log(data);
                                 Availability <img className='w-4' src={assets.info} alt=""/>
                             </p>
                             <p className='text-sm text-gray-500 max-w-[700px] mt-1'>Available days of the week: {data[0].available_days}</p>
-                            <p className='text-sm text-gray-500 max-w-[700px] mt-1'>Available from {data[0].available_from} to {data[0].available_to}</p>
-                        </div>
+                            <p className='text-sm text-gray-500 max-w-[700px] mt-1'>Available from {formatTime(data[0].available_from)}to {formatTime(data[0].available_to)}</p>
+                        </div>       
+
                         <div>
                             <p className='flex items-center gap-1 text-sm font-medium text-gray-900 mt-3'>
                                 About <img className='w-4' src={assets.info} alt=""/>

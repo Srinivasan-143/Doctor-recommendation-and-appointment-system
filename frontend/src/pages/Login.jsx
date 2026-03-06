@@ -80,23 +80,31 @@ const Login = () => {
         }
 
         else{
-            fetch(`http://localhost:8081/loginPatientDetails/${patientId}`)
-            .then(res => res.json())
-            .then(data => {
-            const actualPass = data[0].password;
-            if (actualPass === password) {
-            setInvalid(false);
-            setToken(true);
-            setPatientId(patientId);
-            localStorage.setItem("patientId", patientId);
-            localStorage.setItem("token", "true");
-            localStorage.removeItem("doctorId"); // clear doctor if patient logs in
-            navigate('/');
-            } else {
-            setInvalid(true);
-            }
-        })
-        .catch(() => setInvalid(true));
+            fetch("http://localhost:8081/loginPatient", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    email,
+    password
+  })
+})
+.then(res => res.json())
+.then(data => {
+  if (data.success) {
+    setInvalid(false);
+    setToken(true);
+    setPatientId(data.patientId);
+
+    localStorage.setItem("patientId", data.patientId);
+    localStorage.setItem("token", "true");
+    localStorage.removeItem("doctorId");
+
+    navigate("/");
+  } else {
+    setInvalid(true);
+  }
+})
+.catch(() => setInvalid(true));
 
         }
     }
@@ -221,8 +229,8 @@ const Login = () => {
                         : (
                             <div className='w-full'>
                                 <div className='w-full mt-3'>
-                                    <p>Patient ID:</p>
-                                    <input className='border border-zinc-300 rounded w-full p-2 mt-1' type='number' onChange={(e) => setPatientId(e.target.value)} value={patientId} placeholder="Enter the patient ID provided to you" required/>
+                                    <p>Email ID:</p>
+                                    <input className='border border-zinc-300 rounded w-full p-2 mt-1' type='email' onChange={(e) => setEmail(e.target.value)} value={email} placeholder="Enter your Email Id" required/>
                                 </div>
                                 <div className='w-full mt-3'>
                                     <p>Password:</p>

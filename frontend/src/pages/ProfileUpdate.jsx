@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { assets } from '../assets/assets';
 
 const ProfileUpdate = () => {
   const { id } = useParams();   // 👈 patient_id comes from URL
   const [formData, setFormData] = useState({});
   const [showPasswordForm, setShowPasswordForm] = useState(true); 
   const [newPassword, setNewPassword] = useState(''); 
+  const [showpassword,setshowpassword] = useState(false);
   const navigate = useNavigate();
+
+  //
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState('');
 
   useEffect(() => {
     fetch(`http://localhost:8081/patientProfile/${id}`)
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) setFormData(data[0]);
+        if (data[0].profile_photo) {
+        setPreviewImage(`http://localhost:8081/${data[0].profile_photo}`);
+      }
       })
       .catch(err => console.error(err));
   }, [id]);
@@ -20,6 +29,34 @@ const ProfileUpdate = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    setSelectedImage(file);
+    setPreviewImage(URL.createObjectURL(file));
+  }
+};
+
+const handleImageUpload = async () => {
+  if (!selectedImage) {
+    alert("Select an image first");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("profilePhoto", selectedImage);
+
+  await fetch(`http://localhost:8081/updatePatientPhoto/${id}`, {
+    method: "PUT",
+    body: formData,
+  });
+
+  alert("Profile image updated");
+};
+const pas = ()=>{
+  setshowpassword(!showpassword);
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,6 +90,24 @@ const handlePasswordSubmit = async (e) => {
 
   return (
     <div>
+        <div className="mb-6">
+    <p className="font-medium mb-2">Profile Image</p>
+
+    <img
+      src={previewImage || assets.userImage}
+      className="w-32 h-32 rounded-full object-cover border mb-2"
+    />
+
+    <input type="file" accept="image/*" onChange={handleImageChange} />
+
+    <button
+      type="button"
+      onClick={handleImageUpload}
+      className="bg-teal-600 text-white px-4 py-2 rounded-md mt-2"
+    >
+      Update Image
+    </button>
+  </div>
     <form onSubmit={handleSubmit}>
       <h2>Update Profile</h2>
       <input type="text" value={formData.patient_id} disabled />
@@ -187,13 +242,13 @@ const handlePasswordSubmit = async (e) => {
   </button>
 </form>
 {/* Password form */}
- 
-   <form onSubmit={handlePasswordSubmit} className="mt-3"> 
+ <button className="bg-primary text-white w-full py-2 rounded-md mt-4" onClick={pas} style={{display:showpassword?'none':'block'}}>Update Password</button>
+   <form onSubmit={handlePasswordSubmit} className="mt-3" style={{display:showpassword?'block':'none'}}> 
    <p>New Password:</p> 
    <input type="password" value={newPassword} onChange={
     (e) => setNewPassword(e.target.value)} className="border rounded w-full p-2" required /> 
-    <button type="submit" className="bg-red-600 text-white w-full py-2 rounded-md mt-2"> Update Password </button>
-     <button type="button" onClick={() => setShowPasswordForm(true)} className="bg-gray-400 text-white w-full py-2 rounded-md mt-2" > Cancel </button>
+    <button type="submit" className="bg-red-600 text-white w-full py-2 rounded-md mt-2"> Save Password </button>
+     <button type="button" onClick={pas} className="bg-gray-400 text-white w-full py-2 rounded-md mt-2" > Cancel </button>
       </form>
  
 </div>

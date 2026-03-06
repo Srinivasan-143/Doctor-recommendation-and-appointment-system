@@ -28,6 +28,19 @@ const Doctorprofile = () => {
           .catch(err => console.log(err));
       }, [doctorId]);
     
+        const formatTime = (time) => {
+        if (!time) return "";
+
+        const [hours, minutes] = time.split(":");
+        let h = parseInt(hours);
+        const ampm = h >= 12 ? "PM" : "AM";
+
+        h = h % 12;
+        h = h ? h : 12; // 0 becomes 12
+
+        return `${h}:${minutes} ${ampm}`;
+        };
+
       if (!loaded || !data) {
         return <p>Loading profile...</p>;
       }
@@ -43,7 +56,7 @@ const Doctorprofile = () => {
             {/*<img className='w-64 rounded-md' src={assets[`doc${doctorId}`]}
                                             alt="doctorimage" /> */} 
             <img
-            className="w-64 rounded-md"
+            className="w-40 rounded-md"
             src={
                 data.profile_photo
                 ? `http://localhost:8081/${data.profile_photo}`
@@ -58,7 +71,7 @@ const Doctorprofile = () => {
 
 
             <div>
-                <p className='text-neutral-500 underline mt-3'>Doctor INFORMATION</p>
+                <p className='text-neutral-500 underline mt-3'>DOCTOR INFORMATION</p>
                 <div className='grid grid-cols-2 gap-x-4 mt-3 text-neutral-700'>
                     <p className='font-medium'>Doctor ID:</p>
                     <p>{data.doctor_id}</p>
@@ -73,10 +86,10 @@ const Doctorprofile = () => {
                     <p>{data.available_days}</p>
 
                     <p className='font-medium'>Available from :</p>
-                    <p>{data.available_from}</p>
+                    <p>{formatTime(data.available_from)}</p>
 
                     <p className='font-medium'>Available to :</p>
-                    <p>{data.available_to}</p>
+                    <p>{formatTime(data.available_to)}</p>
 
                     <p className='font-medium'>Phone number:</p>
                     <p className='text-blue-500'>{data.phone_number}</p>

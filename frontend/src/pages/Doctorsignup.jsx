@@ -139,6 +139,18 @@ setFormData({
   }
 };
 
+const formatTime = (time) => {
+  if (!time) return "";
+
+  const [hours, minutes] = time.split(":");
+  let h = parseInt(hours);
+  const ampm = h >= 12 ? "PM" : "AM";
+
+  h = h % 12;
+  h = h ? h : 12; // 0 becomes 12
+
+  return `${h}:${minutes} ${ampm}`;
+};
 
 return loaded && (
         <div className="p-8 space-y-8">
@@ -216,9 +228,34 @@ return loaded && (
                 <option value="Sunday">Sunday</option>
             </select>
             <p>Available from</p>
-            <input type="time" name="availableFrom" value={formData.doctor.availableFrom} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
+            <input
+              type="time"
+              name="availableFrom"
+              value={formData.doctor.availableFrom}
+              onChange={(e) => handleChange(e, 'doctor')}
+              className="w-full p-2 border rounded"
+              required
+            />
+            <p>
+            Selected time: {formatTime(formData.doctor.availableFrom)}
+          </p>
+            {/*<p>Available from</p>
+            <input type="time" name="availableFrom" value={formatTime(formData.doctor.availableFrom)} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
             <p>Available till</p>
             <input type="time" name="availableTo" value={formData.doctor.availableTo} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
+            */}
+            <p>Available till</p>
+            <input
+              type="time"
+              name="availableTo"
+              value={formData.doctor.availableTo}
+              onChange={(e) => handleChange(e, 'doctor')}
+              className="w-full p-2 border rounded"
+              required
+            />
+            <p>
+            Selected time: {formatTime(formData.doctor.availableTo)}
+          </p>
             <p>Years of experience</p>
             <input type="number" name="yearsOfExperience" placeholder="Enter the Years of Experience" value={formData.doctor.yearsOfExperience} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
             <p>Salary</p>

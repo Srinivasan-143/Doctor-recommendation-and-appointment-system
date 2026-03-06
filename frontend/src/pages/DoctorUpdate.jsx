@@ -6,6 +6,7 @@ const DoctorUpdate = () => {
   const [formData, setFormData] = useState({});
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const [showpassword,setshowpassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +21,10 @@ const DoctorUpdate = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const pas = ()=>{
+    setshowpassword(!showpassword);
+  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +59,19 @@ const DoctorUpdate = () => {
       console.error(err);
     }
   };
+
+  const formatTime = (time) => {
+  if (!time) return "";
+
+  const [hours, minutes] = time.split(":");
+  let h = parseInt(hours);
+  const ampm = h >= 12 ? "PM" : "AM";
+
+  h = h % 12;
+  h = h ? h : 12; // 0 becomes 12
+
+  return `${h}:${minutes} ${ampm}`;
+};
 
   if (!formData.doctor_id) return <p>Loading doctor profile...</p>;
 
@@ -149,6 +167,7 @@ const DoctorUpdate = () => {
             onChange={handleChange}
             className="border rounded w-full p-2"
         />
+        <p>Selected Time : {formatTime(formData.available_from)}</p>
         </div>
 
         <div className="mt-3">
@@ -160,6 +179,7 @@ const DoctorUpdate = () => {
             onChange={handleChange}
             className="border rounded w-full p-2"
         />
+        <p>Selected Time : {formatTime(formData.available_to)}</p>
         </div>
 
         <div className="mt-3">
@@ -190,16 +210,16 @@ const DoctorUpdate = () => {
     </form>
 
     {/* Password form */}
- 
-   <form onSubmit={handlePasswordSubmit} className="mt-3"> 
+ <button className="bg-primary text-white w-full py-2 rounded-md mt-4" onClick={pas} style={{display:showpassword?'none':'block'}}>Update Password</button>
+   <form onSubmit={handlePasswordSubmit} className="mt-3" style={{display:showpassword?'block':'none'}}> 
    <p>New Password:</p> 
    <input type="password" value={newPassword} onChange={
     (e) => setNewPassword(e.target.value)} className="border rounded w-full p-2" required /> 
-    <button type="submit" className="bg-red-600 text-white w-full py-2 rounded-md mt-2"> Update Password </button>
-     <button type="button" onClick={() => setShowPasswordForm(true)} className="bg-gray-400 text-white w-full py-2 rounded-md mt-2" > Cancel </button>
+    <button type="submit" className="bg-red-600 text-white w-full py-2 rounded-md mt-2"> Save Password </button>
+     <button type="button" onClick={pas} className="bg-gray-400 text-white w-full py-2 rounded-md mt-2" > Cancel </button>
       </form>
-
-      </div>
+ 
+</div>
   );
 };
 
