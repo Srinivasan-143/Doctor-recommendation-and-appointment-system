@@ -104,7 +104,7 @@ const DiagnoseComponent = () => {
           style={{
             marginTop: "20px",
             padding: "10px 20px",
-            backgroundColor: "#007bff",
+            backgroundColor: "teal",
             color: "white",
             border: "none",
             borderRadius: "5px",
@@ -148,7 +148,7 @@ const DiagnoseComponent = () => {
         <>
         <p>------------------------</p>
                 
-          <p style={{ color: "white", backgroundColor:"black", borderRadius:"10px" }}>Disease: <strong>{result.predicted_disease}</strong></p>
+          <p style={{ color: "white", backgroundColor:"black", borderRadius:"10px" }}>Possible Disease: <strong>{result.predicted_disease}</strong></p>
           <br />
           <p style={{ color: "white", backgroundColor:"black", borderRadius:"10px" }}>Recommended Specialist: <strong>{result.specialist}</strong></p>
           <br />

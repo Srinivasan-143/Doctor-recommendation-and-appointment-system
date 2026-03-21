@@ -199,17 +199,17 @@ return loaded && (
                 <option value="neurologist">Neurologist</option>
                 <option value="gastroenterologist">Gastroenterologist</option>
 
-                <option value="Allergist-(Immunologist)">Allergist-(Immunologist)</option>
-                <option value="Hepatologist">Hepatologist</option>
-                <option value="Infectious-Disease-Specialist">Infectious-Disease-Specialist</option>
-                <option value="Endocrinologist">Endocrinologist</option>
-                <option value="Pulmonologist">Pulmonologist</option>
-                <option value="Cardiologist">Cardiologist</option>
-                <option value="Orthopedic-Surgeon">Orthopedic-Surgeon</option>
-                <option value="Colorectal-Surgeon">Colorectal-Surgeon</option>
-                <option value="Vascular-Surgeon">Vascular-Surgeon</option>
-                <option value="Rheumatologist">Rheumatologist</option>
-                <option value="Urologist">Urologist</option>
+                <option value="allergist">Allergist</option>
+                <option value="hepatologist">Hepatologist</option>
+                <option value="infectious-disease-specialist">Infectious-Disease-Specialist</option>
+                <option value="endocrinologist">Endocrinologist</option>
+                <option value="pulmonologist">Pulmonologist</option>
+                <option value="cardiologist">Cardiologist</option>
+                <option value="orthopedic-surgeon">Orthopedic-Surgeon</option>
+                <option value="colorectal-surgeon">Colorectal-Surgeon</option>
+                <option value="vascular-surgeon">Vascular-Surgeon</option>
+                <option value="rheumatologist">Rheumatologist</option>
+                <option value="urologist">Urologist</option>
 
 
             </select>

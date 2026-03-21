@@ -31,7 +31,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="navbar">
-      {/* Logo */}
+      {/* Logo 
       <img
         onClick={() => navigate("/")}
         className="logo-img"
@@ -39,7 +39,8 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
         alt="logo"
         style={{height:'50px', width:"auto"}}
       />
-
+*/}
+<p style={{color:"black", padding:'5px', borderRadius:'10px', fontWeight:'bold',textDecoration:"none",border:'1px solid black'}}>SymptoDoc</p>
       {/* Desktop Nav */}
       <ul className="nav-links"> 
         <NavLink to="/"><li>HOME</li></NavLink> 
@@ -135,8 +136,8 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
         {/* Hamburger Menu Icon (mobile only) */}
-      <div className="menu-icon" onClick={handleMenu} style={{paddingLeft:"10px"}}>
-        <img src={assets.menuicon} alt="Menu_icon" className="menu-img" />
+      <div className="menu-icon" onClick={handleMenu} style={{paddingLeft:"10px" ,backgroundColor:''}}>
+        <img src={assets.menuicon} alt="Menu_icon" className="menu-img" style={{backgroundColor:'', height:'20px'}} />
       </div>
 
         {/* Mobile Nav */}

@@ -108,9 +108,9 @@ console.log(data);
         return loaded && (
             <div>
                 {/*----------Doctor details----------*/}
-                <div className='flex flex-col sm:flex-row gap-4'>
+                <div className='flex flex-col sm:flex-row gap-4'style={{display:'flex',alignItems:'center', justifyContent:'center'}}>
                     <div>
-                        <img className='bg-primary w-full sm:max-w-72 rounded-lg' src={
+                        <img className='bg-primary sm:max-w-72 rounded-lg h-80' src={
                 data[0].profile_photo
                 ? `http://localhost:8081/${data[0].profile_photo}`
                 : '/default-doctor.png'

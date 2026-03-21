@@ -1,5 +1,5 @@
 import background from './background.jpg'
-import banner4 from './banner3.webp'
+import banner4 from './banner12.avif'
 import logo from './logo.png'
 import doc1 from './doc1.jpg'
 import doc2 from './doc2.jpg'

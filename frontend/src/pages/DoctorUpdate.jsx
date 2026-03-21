@@ -81,12 +81,12 @@ const DoctorUpdate = () => {
       <h2 className="text-2xl font-semibold">Update Doctor Profile</h2>
 
       <div className="mt-3">
-        <p>Doctor ID (constant):</p>
+        <p>Doctor ID :</p>
         <input type="text" value={formData.doctor_id} disabled className="border rounded w-full p-2" />
       </div>
 
       <div className="mt-3">
-        <p>Email (constant):</p>
+        <p>Email :</p>
         <input type="email" value={formData.email} disabled className="border rounded w-full p-2" />
       </div>
 
