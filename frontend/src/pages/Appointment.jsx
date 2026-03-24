@@ -107,7 +107,7 @@ console.log(data);
     if(patientId !== 0){
         return loaded && (
             <div>
-                {/*----------Doctor details----------*/}
+                {/* Doctor details */}
                 <div className='flex flex-col sm:flex-row gap-4'style={{display:'flex',alignItems:'center', justifyContent:'center'}}>
                     <div>
                         <img className='bg-primary sm:max-w-72 rounded-lg h-80' src={
@@ -118,7 +118,7 @@ console.log(data);
                     </div>
 
                     <div className='flex-1 border border-gray-400 rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0'>
-                        {/*-----------Doc-inf0------------*/}
+                        {/* Doctor-information */}
                         <p className='flex items-center gap-2 text-2xl font-medium text-gray-900'>
                             {data[0].first_name} {data[0].last_name}
                             <img className='w-6' src={assets.verified} alt=""/>
@@ -144,7 +144,7 @@ console.log(data);
                     </div>
                 </div>
                 
-                {/*----------Schedule Appointment----------*/}
+                {/* Schedule Appointment */}
                 <div className="mt-6">
                     <h3 className="text-lg font-medium text-gray-900">Schedule an Appointment</h3>
                     <div className="mt-4 flex flex-col">

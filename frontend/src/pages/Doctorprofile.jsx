@@ -71,7 +71,7 @@ const Doctorprofile = () => {
 
 
             <div>
-                <p className='text-neutral-500 underline mt-3'>DOCTOR INFORMATION</p>
+                <p className='text-neutral-500 underline mt-3'>Profile Information</p>
                 <div className='grid grid-cols-2 gap-x-4 mt-3 text-neutral-700'>
                     <p className='font-medium'>Doctor ID:</p>
                     <p>{data.doctor_id}</p>

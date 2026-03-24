@@ -3,14 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
 
 const ProfileUpdate = () => {
-  const { id } = useParams();   // 👈 patient_id comes from URL
+  const { id } = useParams();   //patientid comes from URL
   const [formData, setFormData] = useState({});
   const [showPasswordForm, setShowPasswordForm] = useState(true); 
   const [newPassword, setNewPassword] = useState(''); 
   const [showpassword,setshowpassword] = useState(false);
   const navigate = useNavigate();
-
-  //
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState('');
 

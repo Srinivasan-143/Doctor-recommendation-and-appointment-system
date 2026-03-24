@@ -4,7 +4,7 @@ const DiagnoseComponent = () => {
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
   const [result, setResult] = useState(null);
 
-  // Full symptom list (exactly as you provided, typos included)
+  // Full symptom list(exactly as in ml-dataset)
   const symptomsList = [
     "itching", "skin_rash", "nodal_skin_eruptions", "continuous_sneezing",
     "shivering", "chills", "joint_pain", "stomach_pain", "acidity", "ulcers_on_tongue",
@@ -47,7 +47,7 @@ const DiagnoseComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-// Check if no symptoms are selected
+// Check if no symptoms selected
     if (selectedSymptoms.length === 0) { 
       setResult({ error: "Please select symptoms for prediction." });
       return;
@@ -123,12 +123,12 @@ const DiagnoseComponent = () => {
       left: 0,
       width: "100%",
       height: "100%",
-      backgroundColor: "rgba(0,0,0,0.3)", // semi-transparent overlay
-      backdropFilter: "blur(5px)",        // blur background
+      backgroundColor: "rgba(0,0,0,0.3)", // transparent overlay
+      backdropFilter: "blur(5px)",// blur background
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      zIndex: 1000,                       // ensure it’s on top
+      zIndex: 1000,
     }}
   >
     <div
@@ -141,46 +141,46 @@ const DiagnoseComponent = () => {
         width: "400px",
       }}
     >
-      <h3>🔍 Prediction Result</h3>
+      <h1 style={{fontWeight:'bolder',textDecoration:'underline'}}>Prediction Result</h1>
+      <br />
       {result.error ? (
-        <p style={{ color: "red" }}>{result.error}</p>
+        <p style={{ color: "red", textDecoration:'underline'}}>{result.error}</p>
       ) : (
         <>
-        <p>------------------------</p>
                 
-          <p style={{ color: "white", backgroundColor:"black", borderRadius:"10px" }}>Possible Disease: <strong>{result.predicted_disease}</strong></p>
+          <p style={{ color: "black", borderRadius:"10px", padding:'5px'}}>Possible Disease: <strong style={{textDecoration:'underline'}}>{result.predicted_disease}</strong></p>
+          <p style={{ color: "black", borderRadius:"10px",padding:'5px' }}>Recommended Specialist: <strong style={{textDecoration:'underline'}}>{result.specialist.toUpperCase()}</strong></p>
           <br />
-          <p style={{ color: "white", backgroundColor:"black", borderRadius:"10px" }}>Recommended Specialist: <strong>{result.specialist}</strong></p>
-          <br />
-          <p><strong>Test Accuracy:</strong> {(result.test_accuracy * 100).toFixed(2)}%</p>
-          <p><strong>Validation Accuracy:</strong> {(result.validation_accuracy * 100).toFixed(2)}%</p>
-          <p><strong>Confidence:</strong> {(result.confidence * 100).toFixed(2)}%</p>
-          <p><strong>Model Used:</strong> {result.model_used}</p>
-
+          
           <p>
-            
             <Link to={`/doctors/${result.specialist}`}>
-            <div style={{backgroundColor:"orange",
-              padding:"20px",
-              borderRadius:"20px",
-              border:"3px solid red"
+            <div style={{backgroundColor:"teal",
+              padding:"8px",
+              borderRadius:"10px",
+              color:'white'
             }}>
               Book Appointment with 
               <br />
-              <strong>Top {result.specialist}</strong>
+              <strong>Top {result.specialist.toUpperCase()}</strong>
             </div>
-
-            
             </Link>
           </p>
+      <br />
+          <div>
+          <p>Test Accuracy: {(result.test_accuracy * 100).toFixed(2)}%</p>
+          <p>Validation Accuracy:{(result.validation_accuracy * 100).toFixed(2)}%</p>
+          <p>Confidence: {(result.confidence * 100).toFixed(2)}%</p>
+          <p>Model Used: {result.model_used}</p>
+          </div>
         </>
 
       )}
+
       <button
         onClick={() => setResult(null)} // close modal
         style={{
-          marginTop: "20px",
-          padding: "10px 20px",
+          marginTop: "10px",
+          padding: "5px 10px",
           backgroundColor: "teal",
           color: "white",
           border: "none",

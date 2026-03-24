@@ -6,25 +6,24 @@ const Doctorsignup = () => {
     const [doctorIdData, setDoctorIdData] = useState(null); 
     const [loaded, setLoaded] = useState(false);
     const navi = useNavigate();
-
     
     useEffect(() => {
-  fetch('http://localhost:8081/newDoctorIdda')
-    .then(res => res.json())
-    .then(data => {
-      if (Array.isArray(data) && data.length > 0 && data[0].id) {
-        setDoctorIdData(data[0].id);
-        setFormData(prev => ({
-          ...prev,
-          doctor: { ...prev.doctor, doctorId: data[0].id }
-        }));
-      } else {
-        console.error("Invalid response:", data);
-      }
-      setLoaded(true);
-    })
-    .catch(err => console.error(err));
-}, []);
+    fetch('http://localhost:8081/newDoctorIdda')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0 && data[0].id) {
+          setDoctorIdData(data[0].id);
+          setFormData(prev => ({
+            ...prev,
+            doctor: { ...prev.doctor, doctorId: data[0].id }
+          }));
+        } else {
+          console.error("Invalid response:", data);
+        }
+        setLoaded(true);
+      })
+      .catch(err => console.error(err));
+  }, []);
 
 console.log(doctorIdData);
   const [doctors, setDoctors] = useState([]);
@@ -42,7 +41,7 @@ console.log(doctorIdData);
       availableTo: '',
       yearsOfExperience: '',
       salary: '',
-      password: '' // new field for doctor login table
+      password: ''
     }
   });
 
@@ -55,39 +54,11 @@ console.log(doctorIdData);
   };
 
   // Add doctor (doctor + login)
- /* const addDoctor = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('http://localhost:8081/doctorsignup', formData.doctor);
-      alert("Doctor added successfully!");
-      setFormData({
-        ...formData,
-        doctor: {
-          firstName: '',
-          lastName: '',
-          specialization: 'general-physician',
-          phoneNumber: '',
-          email: '',
-          availableDays: 'Monday',
-          availableFrom: '',
-          availableTo: '',
-          yearsOfExperience: '',
-          salary: '',
-          password: ''
-        }
-      });
-      navi('/doctorlogin');
-    } catch (error) {
-      console.error("Error adding doctor:", error);
-      alert("Failed to signup");
-    }
-  }; */
   const addDoctor = async (e) => {
   e.preventDefault();
 
   const data = new FormData();
 
-  // Append normal fields
   data.append('doctorId', formData.doctor.doctorId);
   data.append('firstName', formData.doctor.firstName);
   data.append('lastName', formData.doctor.lastName);
@@ -101,7 +72,7 @@ console.log(doctorIdData);
   data.append('salary', formData.doctor.salary);
   data.append('password', formData.doctor.password);
 
-  // ✅ Append file separately
+  //Append file separately
   if (formData.doctor.profilePhoto) {
     data.append('profilePhoto', formData.doctor.profilePhoto);
   }
@@ -183,9 +154,6 @@ return loaded && (
               value={formData.doctor.password} onChange={(e) => handleChange(e, 'doctor')}
               className="w-full p-2 border rounded" required />
 
-        
-        {/* -------------------------------------------------------------------------------------------------------*/}
-
             <p>First name</p>
             <input type="text" name="firstName" placeholder="Enter the First Name" value={formData.doctor.firstName} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
             <p>Last name</p>
@@ -198,7 +166,6 @@ return loaded && (
                 <option value="pediatricians">Pediatrician</option>
                 <option value="neurologist">Neurologist</option>
                 <option value="gastroenterologist">Gastroenterologist</option>
-
                 <option value="allergist">Allergist</option>
                 <option value="hepatologist">Hepatologist</option>
                 <option value="infectious-disease-specialist">Infectious-Disease-Specialist</option>
@@ -210,8 +177,6 @@ return loaded && (
                 <option value="vascular-surgeon">Vascular-Surgeon</option>
                 <option value="rheumatologist">Rheumatologist</option>
                 <option value="urologist">Urologist</option>
-
-
             </select>
             <p>Phone number</p>
             <input type="number" name="phoneNumber" placeholder="Enter the Phone Number" value={formData.doctor.phoneNumber} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>

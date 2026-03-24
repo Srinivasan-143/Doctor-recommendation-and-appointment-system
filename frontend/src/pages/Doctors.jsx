@@ -41,7 +41,7 @@ const Doctors = () => {
             {/*<div>
             <p className='text-gray-600' >Browse through the doctors specialist </p>
             </div>*/}
-<div className='flex flex-row items-start gap-3 mt-5'>                {/* Sidebar for specializations */}
+            <div className='flex flex-row items-start gap-3 mt-5'> {/* Sidebar for specializations */}
                 <div className='flex flex-col gap-4 text-sm text-gray-600 w-1/3 sm:w-1/4'>
                     <p onClick={() => navigate('/doctors/general-physician')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "general-physician" ? "bg-indigo-100 text-black" : ""}`}>General Physician</p>
                     <p onClick={() => navigate('/doctors/gynecologist')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "gynecologist" ? "bg-indigo-100 text-black" : ""}`}>Gynecologist</p>
@@ -49,7 +49,6 @@ const Doctors = () => {
                     <p onClick={() => navigate('/doctors/pediatricians')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "pediatricians" ? "bg-indigo-100 text-black" : ""}`}>Pediatricians</p>
                     <p onClick={() => navigate('/doctors/neurologist')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "neurologist" ? "bg-indigo-100 text-black" : ""}`}>Neurologist</p>
                     <p onClick={() => navigate('/doctors/gastroenterologist')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "gastroenterologist" ? "bg-indigo-100 text-black" : ""}`}>Gastroenterologist</p>
-                    
                     <p onClick={() => navigate('/doctors/allergist')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "allergist" ? "bg-indigo-100 text-black" : ""}`}>Allergist</p>
                     <p onClick={() => navigate('/doctors/hepatologist')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "hepatologist" ? "bg-indigo-100 text-black" : ""}`}>Hepatologist</p>
                     <p onClick={() => navigate('/doctors/infectious-disease-specialist')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "infectious-disease-specialist" ? "bg-indigo-100 text-black" : ""}`}>Infectious Disease Specialist</p>
@@ -64,10 +63,8 @@ const Doctors = () => {
 
                 </div>
 
-                
-
                 {/* Doctors list */}
-<div className='w-2/3 sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-5 px-2'>                    {doctors.map((item, index) => (
+<div className='w-2/3 sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-5 px-2'>{doctors.map((item, index) => (
                         <div
                             onClick={() => navigate(`/appointment/${item.doctor_id}`)}
                             key={item.doctor_id}
@@ -96,16 +93,15 @@ const Doctors = () => {
                                         <span className="ml-2 text-sm text-white bg-black font-bold" style={{borderRadius:'10px', padding:'8px'}}>Top Doctor</span>
                                     )*/}
                                 </p>
-                                <p>Specialization: <b>{item.specialization}</b> </p>
+                                <p>Specialization: <b>{item.specialization.toUpperCase()}</b> </p>
                                 <p>Days Available: {item.available_days}</p>
                                 <p>Available Hours: {formatTime(item.available_from)} - {formatTime(item.available_to)}</p>
                                 <p>Years of Experience: {item.years_of_experience}</p>
                                 <p>Doctor Id: {item.doctor_id}</p>
                                 <p className="text-yellow-600">
-                                    ⭐ {Number(item.avg_rating || 0).toFixed(1)} ({item.total_reviews || 0} reviews)
-                                    </p>
-
-
+                                    &#9733; {Number(item.avg_rating || 0).toFixed(1)} ({item.total_reviews || 0} reviews)
+                                    
+                                </p>
                             </div>
                         </div>
                     ))}

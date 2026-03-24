@@ -8,8 +8,8 @@ const { getPrediction } = require("./mlService");
 //image upload
 const path = require('path');
 const multer = require('multer');
-// image storage
 
+// image storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/doctors');
@@ -32,18 +32,15 @@ const patientStorage = multer.diskStorage({
 });
 
 const uploadPatient = multer({ storage: patientStorage });
-
 const upload = multer({ storage });
 
-
-
+//All Apis
 const app = express()
 app.use(cors())
 app.use(express.json())
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
+//database connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -51,6 +48,7 @@ const db = mysql.createConnection({
     database: 'HospitalDBMS'
 })
 
+//All Doctors
 app.get('/doctors', (request, result) => {
     const sql = "SELECT * FROM Doctor"
     db.query(sql, (err, data) => {
@@ -63,7 +61,7 @@ app.get('/doctors', (request, result) => {
     })
 })
 
-
+//Getting Doctors by id
 app.get('/doctors/:id', (request, result) => {
     const doctorId = request.params.id;
     const sql = "SELECT * FROM Doctor WHERE doctor_id = ?"
@@ -77,6 +75,7 @@ app.get('/doctors/:id', (request, result) => {
     })
 })
 
+//Doctor Profile
 app.get('/doctorProfile/:id', (request, result) => {
     const doctorid = request.params.id;
     const sql = "SELECT * FROM doctor WHERE doctor_id  = ?"
@@ -90,7 +89,7 @@ app.get('/doctorProfile/:id', (request, result) => {
     })
 })
 
-
+//Getting Patient Id(constant)
 app.get('/newPatientId', (request, result) => {
     const sql = "SELECT (MAX(patient_id)+1) AS id FROM Patient"
     db.query(sql, (err, data) => {
@@ -105,9 +104,7 @@ app.get('/newPatientId', (request, result) => {
 
 
 // patient signup
-
-const saltRounds = 10; // can adjust, 10-12 is good
-
+const saltRounds = 10; // 10-12
 app.post(
   "/newPatientDetails",
   uploadPatient.single("profilePhoto"),
@@ -129,7 +126,7 @@ app.post(
     } = req.body;
 
     try {
-      // 🔐 hash password
+      //hash password
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const profilePhoto = req.file
@@ -143,7 +140,6 @@ app.post(
          existing_conditions , profile_photo)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
-
       {/*const sql2 = `INSERT INTO login (patient_id, password) VALUES (?, ?)`;*/}
       const sql2 = `INSERT INTO login (patient_id, email, password) VALUES (?, ?, ?)`;
       
@@ -181,85 +177,6 @@ app.post(
   }
 );
 
-{/*
-app.post(
-  "/newPatientDetails",
-  uploadPatient.single("profilePhoto"),
-  (request, result) => {
-
-    const sql = `
-      INSERT INTO patient 
-      (patient_id, first_name, last_name, date_of_birth, gender, address,
-       phone_number, email, blood_type, emergency_contact, allergies,
-       medical_conditions, profile_photo)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    const sql2 = "INSERT INTO login VALUES (?, ?)";
-
-    const {
-      id, firstName, lastName, dateOfBirth, gender,
-      address, phoneNumber, email, bloodType,
-      emergencyContact, allergies, medicalConditions, password
-    } = request.body;
-
-    const profilePhoto = req.file
-      ? `uploads/patients/${req.file.filename}`
-      : null;
-
-    db.query(sql, [
-      id, firstName, lastName, dateOfBirth, gender,
-      address, phoneNumber, email, bloodType,
-      emergencyContact, allergies, medicalConditions,
-      profilePhoto
-    ], (err) => {
-      if (err) return result.status(500).json(err);
-    });
-
-    db.query(sql2, [id, password], (err) => {
-      if (err) return result.status(500).json(err);
-    });
-
-    result.status(201).json("success");
-});
-*/}
-{/*
-app.post('/newPatientDetails', (request, result) => {
-    const sql = "INSERT INTO Patient VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const sql2 = "INSERT INTO Login VALUES (?, ?)";
-    
-    const {
-        id,
-        firstName,
-        lastName,
-        dateOfBirth,
-        gender,
-        address,
-        phoneNumber,
-        email,
-        bloodType,
-        emergencyContact,
-        allergies,
-        medicalConditions,
-        password
-    } = request.body;
-
-    db.query(sql, [id, firstName, lastName, dateOfBirth, gender, address, phoneNumber, email, bloodType, emergencyContact, allergies, medicalConditions], (err, data) => {
-        if (err) {
-            return result.status(500).json(err);
-        }
-    })
-
-    db.query(sql2, [id, password], (err, data) => {
-        if (err) {
-            return result.status(500).json(err);
-        }
-    })
-
-    return result.status(201).json("success")
-})
-*/}
-
 //update patientphoto
 app.put(
   "/updatePatientPhoto/:id",
@@ -286,10 +203,9 @@ app.put(
     });
 });
 
-//verify hashed password
+// verify hashed password
 app.get('/loginPatientDetails/:id', (req, res) => {
   const { id } = req.params;
-
   const sql = `
     SELECT patient_id, name, email, phone, age
     FROM patient
@@ -303,30 +219,7 @@ app.get('/loginPatientDetails/:id', (req, res) => {
   });
 });
 
-
-{/*app.post("/loginPatient", (req, res) => {
-  {/*const { patientId, password } = req.body;
-
-  const sql = "SELECT password FROM login WHERE patient_id = ?";
-  const { email, password } = req.body;
-
-  const sql = "SELECT patient_id, password FROM login WHERE email = ?";
-  db.query(sql, [patientId], async (err, data) => {
-    if (err) return res.status(500).json({ success: false });
-    if (data.length === 0)
-      return res.json({ success: false });
-
-    const match = await bcrypt.compare(password, data[0].password);
-
-    if (!match)
-      return res.json({ success: false });
-
-    res.json({ success: true, patientId });
-    {/*patientId: data[0].patient_id
-  });
-});
-*/}
-
+// Patient Login
 app.post("/loginPatient", (req, res) => {
   const { email, password } = req.body;
 
@@ -355,21 +248,7 @@ app.post("/loginPatient", (req, res) => {
   });
 });
 
-{/*
-app.get('/loginPatientDetails/:id', (request, result) => {
-    const patientId = request.params.id;
-    const sql = "SELECT password FROM Login WHERE patient_id = ?"
-    db.query(sql, [patientId], (err, data) => {
-        if(err){
-            return result.json(err);
-        }
-        else{
-            return result.json(data);
-        }
-    })
-})
-*/}
-
+//Appointment Booking
 app.post('/bookAppointment', (request, result) => {
 
     const presql = "SELECT MAX(appointment_id) as id FROM Appointment"
@@ -398,8 +277,6 @@ app.post('/bookAppointment', (request, result) => {
 
                 }
             })
-
-
             const sql2 = "INSERT INTO Bill VALUES (default, ?, ?, ?, ?);";
             db.query(sql2, [appointment_id, 0, appointment_date, 'pending'], (err, data) => {
                 if (err) {
@@ -409,8 +286,6 @@ app.post('/bookAppointment', (request, result) => {
                 }
             })
         }
-
-
         const sql3 = "INSERT INTO Prescription VALUES (default, ?, ?, ?, ?, ?);";
             db.query(sql3, [appointment_id, '', '', 'Daily', 0], (err, data) => {
                 if (err) {
@@ -424,7 +299,7 @@ app.post('/bookAppointment', (request, result) => {
 })
 
 
-
+//Patient Profile
 app.get('/patientProfile/:id', (request, result) => {
     const patientId = request.params.id;
     const sql = "SELECT * FROM Patient WHERE patient_id = ?"
@@ -438,7 +313,7 @@ app.get('/patientProfile/:id', (request, result) => {
     })
 })
 
-// Update patient details (excluding patient_id and email)
+//Update patient details(without patientid & email)
 app.put('/updatePatientDetails/:id', (req, res) => {
   const { id } = req.params;
   const {
@@ -491,43 +366,8 @@ app.put('/updatePassword/:id', async (req, res) => {
     res.json({ message: 'Password updated successfully!' });
   });
 });
-{/*}
-app.put('/updatePassword/:id', async (req, res) => {
-  const { id } = req.params;
-  const { password } = req.body;
 
-  if (!password) {
-    return res.status(400).json({ message: 'Password is required' });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-  const sql = `UPDATE login SET password = ? WHERE patient_id = ?`;
-
-  db.query(sql, [hashedPassword, id], (err) => {
-    if (err) return res.status(500).json(err);
-    res.json({ message: 'Password updated successfully!' });
-  });
-});
-*/}
-{/*
-app.put('/updatePassword/:id', (req, res) => {
-  const { id } = req.params;
-  const { password } = req.body;
-
-  if (!password) {
-    return res.status(400).json({ message: 'Password is required' });
-  }
-
-  const sql = `UPDATE login SET password = ? WHERE patient_id = ?`;
-
-  db.query(sql, [password, id], (err) => {
-    if (err) return res.status(500).json(err);
-    res.json({ message: 'Password updated successfully!' });
-  });
-});
-*/}
-
+//Appointment per Patient
 app.get('/patientAppointments/:id', (request, result) => {
     const patientId = request.params.id;
     const sql = "SELECT * FROM Appointment WHERE patient_id = ?"
@@ -541,7 +381,7 @@ app.get('/patientAppointments/:id', (request, result) => {
     })
 })
 
-
+//Cancel Appointment
 app.post('/cancelAppointment', (request, result) => {
     const {appointmentId} = request.body;
     const sql = "UPDATE Appointment SET status = 'cancelled' WHERE appointment_id = ?"
@@ -555,8 +395,7 @@ app.post('/cancelAppointment', (request, result) => {
     })
 })
 
-
-
+//Rebook Appointment
 app.post('/rebookAppointment', (request, result) => {
     const {appointmentId} = request.body;
     const sql = "UPDATE Appointment SET status = 'pending' WHERE appointment_id = ?"
@@ -570,6 +409,7 @@ app.post('/rebookAppointment', (request, result) => {
     })
 })
 
+//Getting Doctor id
 app.get('/newDoctorIdda', (req, res) => {
     const sql = "SELECT IFNULL(MAX(doctor_id), 0) + 1 AS id FROM doctor";
     db.query(sql, (err, data) => {
@@ -581,8 +421,7 @@ app.get('/newDoctorIdda', (req, res) => {
     });
 });
 
-
-
+//Delete Doctor
 app.delete('/deleteDoctor/:id', (request, result) => {
     const doctorId = request.params.id;
     const sql = "DELETE FROM Doctor WHERE doctor_id = ?"
@@ -596,8 +435,8 @@ app.delete('/deleteDoctor/:id', (request, result) => {
     })
 })
 
-//doctor signup
 
+//Doctor signup
 app.post('/doctorsignup', upload.single('profilePhoto'), async (req, res) => {
   try {
     const {
@@ -615,7 +454,7 @@ app.post('/doctorsignup', upload.single('profilePhoto'), async (req, res) => {
       password
     } = req.body;
 
-    // 🔐 HASH PASSWORD HERE
+    //HASH PASSWORD
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const profilePhoto = req.file
@@ -653,10 +492,9 @@ app.post('/doctorsignup', upload.single('profilePhoto'), async (req, res) => {
       const loginSql =
   "INSERT INTO doctorlogin (doctor_id, email, password) VALUES (?, ?, ?)";
 
-      // ✅ STORE HASHED PASSWORD
+      //STORE HASHED PASSWORD
       db.query(loginSql, [doctorId, email, hashedPassword], (err2) => {
         if (err2) return res.status(500).json({ message: "Login insert error" });
-
         res.status(201).json({ message: "Doctor added successfully" });
       });
     });
@@ -665,77 +503,13 @@ app.post('/doctorsignup', upload.single('profilePhoto'), async (req, res) => {
   }
 });
 
-{/*}
-app.post('/doctorsignup', upload.single('profilePhoto'), (req, res) => {
-  const {
-    doctorId,
-    firstName,
-    lastName,
-    specialization,
-    phoneNumber,
-    email,
-    availableDays,
-    availableFrom,
-    availableTo,
-    yearsOfExperience,
-    salary,
-    password
-  } = req.body;
-
-  // ✅ If image uploaded → path, else NULL
-  const profilePhoto = req.file
-    ? `uploads/doctors/${req.file.filename}`
-    : null;
-
-  const doctorSql = `
-    INSERT INTO doctor 
-    (doctor_id, first_name, last_name, specialization, phone_number, email,
-     available_days, available_from, available_to, years_of_experience, salary, profile_photo)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  const doctorValues = [
-    doctorId,
-    firstName,
-    lastName,
-    specialization,
-    phoneNumber,
-    email,
-    availableDays,
-    availableFrom,
-    availableTo,
-    yearsOfExperience,
-    salary,
-    profilePhoto
-  ];
-
-  db.query(doctorSql, doctorValues, (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Doctor insert error" });
-    }
-
-    const loginSql =
-      "INSERT INTO doctorlogin (doctor_id, password) VALUES (?, ?)";
-
-    db.query(loginSql, [doctorId, password], (err2) => {
-      if (err2) {
-        return res.status(500).json({ message: "Login insert error" });
-      }
-
-      res.status(201).json({ message: "Doctor added successfully" });
-    });
-  });
-});
-*/}
-
+//Add Doctor
 app.post('/addDoctor', (request, result) => {
-
     const sql = `
-INSERT INTO doctor 
-(first_name, last_name, specialization, phone_number, email, available_days, available_from, available_to, years_of_experience, salary) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-`;
+    INSERT INTO doctor 
+    (first_name, last_name, specialization, phone_number, email, available_days, available_from, available_to, years_of_experience, salary) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `;
 
     const {
         firstName,
@@ -760,35 +534,11 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     })
 
 })
+
+
 //doctor login
-
-{/*app.post('/loginDoctor', (req, res) => {
-  const { doctorId, password } = req.body;
-
-  const sql = "SELECT password FROM doctorlogin WHERE doctor_id = ?";
-
-  db.query(sql, [doctorId], async (err, data) => {
-    if (err) return res.status(500).json(err);
-    if (data.length === 0) {
-      return res.status(401).json({ success: false });
-    }
-
-    // 🔍 Compare entered password with hashed password
-    const isMatch = await bcrypt.compare(password, data[0].password);
-
-    if (!isMatch) {
-      return res.status(401).json({ success: false });
-    }
-
-    // ✅ LOGIN SUCCESS
-    res.json({ success: true, doctorId });
-  });
-});
-*/}
-
 app.post('/loginDoctor', (req, res) => {
   const { email, password } = req.body;
-
   const sql = `
     SELECT dl.password, d.doctor_id
     FROM doctorlogin dl
@@ -817,21 +567,7 @@ app.post('/loginDoctor', (req, res) => {
 });
 
 
-{/*}
-app.post('/loginDoctor', (req, res) => {
-    const { doctorId, password } = req.body;
-    const sql = "SELECT * FROM DoctorLogin WHERE doctor_id = ? AND password = ?";
-    db.query(sql, [doctorId, password], (err, data) => {
-        if (err) return res.status(500).json(err);
-        if (data.length > 0) {
-            return res.json({ success: true, doctorId });
-        } else {
-            return res.status(401).json({ success: false, message: "Invalid credentials" });
-        }
-    });
-});
-*/}
-//fetch appoinments for doctor
+//Appoinments per doctor
 app.get('/doctorlogin/:id', (req, res) => {
     const doctorId = req.params.id;
 
@@ -853,8 +589,7 @@ app.get('/doctorlogin/:id', (req, res) => {
 });
 
 
-// Update appointment status
-// Update appointment status, with optional reschedule
+// Update appointment status(with reschedule)
 app.post('/updateAppointmentStatus', (req, res) => {
     const { appointmentId, status, appointment_date, appointment_time } = req.body;
 
@@ -876,6 +611,7 @@ app.post('/updateAppointmentStatus', (req, res) => {
         }
     });
 });
+
 
 // Update doctor details
 app.put('/updateDoctorDetails/:id', (req, res) => {
@@ -911,8 +647,7 @@ app.put('/updateDoctorDetails/:id', (req, res) => {
 });
 
 
-// Update doctor password
-
+//Update doctor password
 app.put('/updateDoctorPassword/:id', async (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
@@ -935,24 +670,8 @@ app.put('/updateDoctorPassword/:id', async (req, res) => {
   }
 });
 
-{/*}
-app.put('/updateDoctorPassword/:id', (req, res) => {
-  const { id } = req.params;
-  const { password } = req.body;
 
-  if (!password) {
-    return res.status(400).json({ message: 'Password is required' });
-  }
-
-  const sql = `UPDATE doctorlogin SET password = ? WHERE doctor_id = ?`;
-
-  db.query(sql, [password, id], (err) => {
-    if (err) return res.status(500).json(err);
-    res.json({ message: 'Password updated successfully!' });
-  });
-});
-*/}
-// Get all patients
+//All patients
 app.get('/allPatients', (req, res) => {
   db.query('SELECT patient_id, first_name, last_name, email, phone_number FROM patient', (err, result) => {
     if (err) return res.status(500).json(err);
@@ -963,8 +682,7 @@ app.get('/allPatients', (req, res) => {
 // Delete patient by ID
 app.delete('/deletePatient/:id', (req, res) => {
   const { id } = req.params;
-
-  // First delete from login table (to avoid FK issues), then patient
+  //delete from login table
   {/*db.query('DELETE FROM login WHERE patient_id = ?', [id], (err) => {
     if (err) return res.status(500).json(err);
     */}
@@ -975,10 +693,7 @@ app.delete('/deletePatient/:id', (req, res) => {
   });
 
 
-
-
-//ml - prediction
-
+//ml prediction
 app.post("/diagnose", async (req, res) => {
   const symptoms = req.body; // JSON { itching:1, skin_rash:0, ... }
   try {
@@ -990,7 +705,7 @@ app.post("/diagnose", async (req, res) => {
   }
 });
 
-// Review system
+//Review system
 app.post('/reviews', (req, res) => {
     const { appointment_id, patient_id, doctor_id, rating, review_text } = req.body;
 
@@ -1018,8 +733,7 @@ app.post('/reviews', (req, res) => {
     });
 });
 
-//get top doctor
-// GET /doctors/top/:specialization
+//get top doctor by specialization
 app.get('/doctors/top/:specialization', (req, res) => {
     const specialization = req.params.specialization;
     const sql = `
@@ -1034,9 +748,8 @@ app.get('/doctors/top/:specialization', (req, res) => {
     });
 });
 
-//top doctor by specialization 
-
-// Get doctors by specialization, sorted by rating
+///////////////////////////////////////////////////////////////////////////
+// Top doctors by specialization(SORTED by rating)
 app.get('/doctors/specialization/:specialization', (req, res) => {
     const specialization = req.params.specialization;
 
@@ -1054,7 +767,7 @@ app.get('/doctors/specialization/:specialization', (req, res) => {
 });
 
 
-//get reviews for a doctor
+//get reviews for doctor
 app.get('/reviews/doctor/:id', (req, res) => {
     const doctorId = req.params.id;
     const sql = "SELECT * FROM reviews WHERE doctor_id = ? ORDER BY created_at DESC";
@@ -1067,9 +780,7 @@ app.get('/reviews/doctor/:id', (req, res) => {
     });
 });
 
-
-
-
+//App Listening on port
 app.listen(8081, () => {
     console.log("listening")
 })

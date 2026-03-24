@@ -87,5 +87,4 @@ const ReviewForm = ({ appointmentId, patientId, doctorId }) => {
     </div>
   );
 };
-
 export default ReviewForm;

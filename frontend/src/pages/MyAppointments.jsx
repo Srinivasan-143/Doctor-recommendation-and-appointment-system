@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
-import ReviewForm from './ReviewForm'   // <-- import the review form
+import ReviewForm from './ReviewForm'   //review form
 
 const MyAppointments = () => {
     

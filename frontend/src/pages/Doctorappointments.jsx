@@ -4,7 +4,7 @@ import { assets } from '../assets/assets'
 import { useNavigate,useParams } from 'react-router-dom'
 
 const Doctorappointments = () => {
-    const { id } = useParams(); // ✅ doctorId comes from URL
+    const { id } = useParams(); //doctorId comes from URL
     const [data, setData] = useState(null)
     const [loaded, setLoaded] = useState(false)
     const {doctorId} = useContext(AppContext)

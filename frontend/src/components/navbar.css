@@ -1,7 +1,7 @@
 .navbar {
   width: 100%;
   display: flex;
-  justify-content: space-between; /* distribute logo, nav, profile */
+  justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
@@ -40,7 +40,6 @@
   color: teal;
 }
 
-/* Profile Section */
 .profile-section {
   display: flex;
   align-items: center;
@@ -93,7 +92,7 @@
   display: flex;
 }
 
-/* Hamburger Menu */
+/* Menu icon */
 .menu-icon {
   display: none;
   cursor: pointer;
@@ -104,7 +103,7 @@
   height: 32px;
 }
 
-/* Mobile Nav */
+/* Mobile view */
 .mobile-nav-links {
   position: fixed;
   top: 0;

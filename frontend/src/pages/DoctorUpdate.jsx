@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const DoctorUpdate = () => {
-  const { id } = useParams(); // doctor_id from URL
+  const { id } = useParams(); // doctorid from URL
   const [formData, setFormData] = useState({});
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
@@ -95,7 +95,6 @@ const DoctorUpdate = () => {
         <input type="text" name="first_name" value={formData.first_name || ''} onChange={handleChange} className="border rounded w-full p-2" />
       </div>
 
-      {/* Repeat for last_name, specialization, phone_number, available_days, available_from, available_to, years_of_experience, salary */}
       <div className="mt-3">
         <p>Last Name:</p>
         <input

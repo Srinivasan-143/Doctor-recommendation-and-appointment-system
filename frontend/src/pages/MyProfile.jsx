@@ -42,7 +42,7 @@ console.log(patientId)
         />
       {/*<img className="w-64 rounded-md" src={assets.userImage} alt="" />*/}
       <div>
-        <p className="text-neutral-500 underline mt-3">USER INFORMATION</p>
+        <p className="text-neutral-500 underline mt-3">Profile Information</p>
         <div className="grid grid-cols-2 gap-x-4 mt-3 text-neutral-700">
           <p className="font-medium">Patient ID:</p>
           <p>{data.patient_id}</p>

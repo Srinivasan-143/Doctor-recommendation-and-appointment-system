@@ -7,7 +7,6 @@ const SpecialityMenu = () => {
 
     const navigate = useNavigate();
     const patientid = localStorage.getItem('patientId');
-
     return (
         <div className='flex flex-col items-center gap-4 py-16 text-gray-800' id='speciality'>
             <h1 className='text-2xl font-medium'>Find by Speciality </h1>
@@ -45,5 +44,4 @@ const SpecialityMenu = () => {
         </div>
     )
 }
-
 export default SpecialityMenu

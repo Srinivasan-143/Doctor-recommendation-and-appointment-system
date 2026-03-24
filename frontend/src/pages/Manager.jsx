@@ -59,10 +59,6 @@ const Manager = () => {
     };
     
     const [doctors, setDoctors] = useState([]);
-
-    {/*const [formData, setFormData] = useState({
-        doctor: { firstName: '', lastName: '', specialization: 'general-physician', phoneNumber: '', email: '', availableDays: 'Monday', availableFrom: '', availableTo: '', yearsOfExperience: '', salary: '' }
-    }); */}
     const [formData, setFormData] = useState({
         doctor: {
           doctorId: '',
@@ -76,12 +72,10 @@ const Manager = () => {
           availableTo: '',
           yearsOfExperience: '',
           salary: '',
-          password: '' // new field for doctor login table
+          password: ''
         }
       });
     
-
-    // Fetching doctors on component mount
     useEffect(() => {
         const fetchDoctors = async () => {
             const response = await axios.get('http://localhost:8081/doctors');
@@ -100,7 +94,6 @@ const Manager = () => {
         });
     };
 
-    // Function to add a doctor
     const addDoctor = async (e) => {
         e.preventDefault();
         await axios.post('http://localhost:8081/doctorsignup', formData.doctor);
@@ -124,7 +117,6 @@ const formatTime = (time) => {
   return `${h}:${minutes} ${ampm}`;
 };
 
-    // Function to delete a doctor
     const deleteDoctor = async (doctorId) => {
         await axios.delete(`http://localhost:8081/deleteDoctor/${doctorId}`);
         alert("doctor deleted")
@@ -141,8 +133,6 @@ const formatTime = (time) => {
                  console.log(result); // Refresh list after deletion 
                  setPatients(patients.filter(p => p.patient_id !== id)); } 
                  catch (err) { console.error(err); } };
-
-
 
 
     if (st == null) {
@@ -165,14 +155,14 @@ const formatTime = (time) => {
         <div className="p-8 space-y-8">
             {/*logout*/}
             <div style={{display:"flex", justifyContent:'space-evenly'}}>
-            {<button onClick={()=>scrollToDoctor(addoctor)} style={{backgroundColor:"orange", padding:"5px", color:"black", borderRadius:'20px'}}>Add Doctor</button>}
-            {<button onClick={()=>scrollToDoctor(alldoctor)} style={{backgroundColor:"orange", padding:"5px", color:"black", borderRadius:'20px'}}>Edit Doctors</button>}
-            {<button onClick={()=>scrollToDoctor(allpatient)} style={{backgroundColor:"orange", padding:"5px", color:"black", borderRadius:'20px'}}>Delete Patients</button>}
+            {<button onClick={()=>scrollToDoctor(addoctor)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>Add Doctor</button>}
+            {<button onClick={()=>scrollToDoctor(alldoctor)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>Edit Doctors</button>}
+            {<button onClick={()=>scrollToDoctor(allpatient)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>Delete Patients</button>}
              {<button onClick={()=>{
                 localStorage.removeItem("admin");
                 setIsAuthenticated(false);
                 navi('/');
-            }} style={{backgroundColor:"teal", padding:"10px", color:"white", borderRadius:'20px'}}>logout</button>}
+            }} style={{backgroundColor:"teal", padding:"10px", color:"white", borderRadius:'20px'}}>Logout</button>}
             
             </div>
 
@@ -199,7 +189,23 @@ const formatTime = (time) => {
                 <option value="pediatricians">Pediatrician</option>
                 <option value="neurologist">Neurologist</option>
                 <option value="gastroenterologist">Gastroenterologist</option>
-
+                <option value="cardiologist">Cardiologist</option>
+                <option value="pulmonologist">Pulmonologist</option>
+                <option value="endocrinologist">Endocrinologist</option>
+                <option value="hepatologist">Hepatologist</option>
+                <option value="rheumatologist">Rheumatologist</option>
+                <option value="orthopedic-surgeon">Orthopedic Surgeon</option>
+                <option value="urologist">Urologist</option>
+                <option value="vascular-surgeon">Vascular Surgeon</option>
+                <option value="colorectal-surgeon">Colorectal Surgeon</option>
+                <option value="allergist">Allergist</option>
+                <option value="infectious-disease-specialist">Infectious Disease Specialist</option>
+                {/*<option value="general-physician">General Physician</option>
+                <option value="gynecologist">Gynecologist</option>
+                <option value="dermatologist">Dermatologist</option>
+                <option value="pediatricians">Pediatrician</option>
+                <option value="neurologist">Neurologist</option>
+                <option value="gastroenterologist">Gastroenterologist</option>
                 <option value="Allergist-(Immunologist)">Allergist-(Immunologist)</option>
                 <option value="Hepatologist">Hepatologist</option>
                 <option value="Infectious-Disease-Specialist">Infectious-Disease-Specialist</option>
@@ -211,7 +217,7 @@ const formatTime = (time) => {
                 <option value="Vascular-Surgeon">Vascular-Surgeon</option>
                 <option value="Rheumatologist">Rheumatologist</option>
                 <option value="Urologist">Urologist</option>
-
+                */}
 
             </select>
             <p>Phone number</p>

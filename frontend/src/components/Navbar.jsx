@@ -5,29 +5,26 @@ import { AppContext } from "../context/AppContext";
 import "./navbar.css";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-const { patientId, doctorId, token, setToken, setPatientId, setDoctorId } = useContext(AppContext);
-const [isMenuOpen, setIsMenuOpen] = useState(false);
+      const navigate = useNavigate();
+      const { patientId, doctorId, token, setToken, setPatientId, setDoctorId } = useContext(AppContext);
+      const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+      const handleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+      };
 
-  const handleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const navbar = document.querySelector(".navbar");
-      if (window.scrollY > 50) {
-        navbar.classList.add("scrolled");
-      } else {
-        navbar.classList.remove("scrolled");
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  
+      useEffect(() => {
+        const handleScroll = () => {
+          const navbar = document.querySelector(".navbar");
+          if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+          } else {
+            navbar.classList.remove("scrolled");
+          }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }, []);
 
   return (
     <div className="navbar">
@@ -39,26 +36,24 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
         alt="logo"
         style={{height:'50px', width:"auto"}}
       />
-*/}
-<p style={{color:"black", padding:'5px', borderRadius:'10px', fontWeight:'bold',textDecoration:"none",border:'1px solid black'}}>SymptoDoc</p>
+     */}
+      <p style={{color:"black", padding:'5px', borderRadius:'10px', fontWeight:'bold',textDecoration:"none",border:'1px solid black'}}>SymptoDoc</p>
       {/* Desktop Nav */}
       <ul className="nav-links"> 
-        <NavLink to="/"><li>HOME</li></NavLink> 
+        <NavLink to="/"><li>Home</li></NavLink> 
 
         {!doctorId && (
-                <NavLink to={patientId && !doctorId ?"/diagnose" : "/login"}><li>FIND DISEASE</li></NavLink>
+                <NavLink to={patientId && !doctorId ?"/diagnose" : "/login"}><li>Find Disease & Specialist</li></NavLink>
         )}
 
         {!doctorId && (
-                  <NavLink to={patientId ? "/doctors" : "/login"}><li>ALL DOCTORS</li></NavLink>
+                  <NavLink to={patientId ? "/doctors" : "/login"}><li>All Doctors</li></NavLink>
         )}
 
-        
-        {/*<NavLink to={patientId && !doctorId ? "/doctors" : "/login"}><li>ALL DOCTORS</li></NavLink>*/}
-        <NavLink to="/about"><li>ABOUT</li></NavLink>
-        <NavLink to="/manager"><li>ADMIN</li></NavLink>      
+        <NavLink to="/about"><li>About</li></NavLink>
+        <NavLink to="/manager"><li>Admin</li></NavLink>      
    
-      {!doctorId && <NavLink to="/doctorlogin"><li>DOCTOR LOGIN</li></NavLink>} 
+      {!doctorId && <NavLink to="/doctorlogin"><li>Doctor Login</li></NavLink>} 
       </ul>
 
       {/* Profile / Login */}
@@ -132,10 +127,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
         )}
       </div>
 
-
-
-
-        {/* Hamburger Menu Icon (mobile only) */}
+        {/* Menu Icon (mobile view) */}
       <div className="menu-icon" onClick={handleMenu} style={{paddingLeft:"10px" ,backgroundColor:''}}>
         <img src={assets.menuicon} alt="Menu_icon" className="menu-img" style={{backgroundColor:'', height:'20px'}} />
       </div>
@@ -146,22 +138,20 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
             <img src={assets.crossicon} alt="Close" className="close-btn" onClick={handleMenu} />
           </div>
 
-          <NavLink to="/" onClick={handleMenu}>HOME</NavLink> 
+          <NavLink to="/" onClick={handleMenu}>Home</NavLink> 
 
         {!doctorId && (
-                <NavLink to={patientId && !doctorId ?"/diagnose" : "/login"} onClick={handleMenu}>FIND DISEASE</NavLink>
+                <NavLink to={patientId && !doctorId ?"/diagnose" : "/login"} onClick={handleMenu}>Find Disease & Specialist</NavLink>
         )}
 
         {!doctorId && (
-                  <NavLink to={patientId ? "/doctors" : "/login"} onClick={handleMenu}>ALL DOCTORS</NavLink>
+                  <NavLink to={patientId ? "/doctors" : "/login"} onClick={handleMenu}>All Doctors</NavLink>
         )}
 
-        
-        {/*<NavLink to={patientId && !doctorId ? "/doctors" : "/login"}><li>ALL DOCTORS</li></NavLink>*/}
-        <NavLink to="/about" onClick={handleMenu}>ABOUT</NavLink>
-        <NavLink to="/manager" onClick={handleMenu}>ADMIN</NavLink>      
+        <NavLink to="/about" onClick={handleMenu}>About</NavLink>
+        <NavLink to="/manager" onClick={handleMenu}>Admin</NavLink>      
    
-      {!doctorId && <NavLink to="/doctorlogin" onClick={handleMenu}>DOCTOR LOGIN</NavLink>}
+      {!doctorId && <NavLink to="/doctorlogin" onClick={handleMenu}>Doctor Login</NavLink>}
           {/* 🔹 Add Logout here */}
           {token && (
             <p
@@ -187,5 +177,4 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
     </div>
   );
 };
-
 export default Navbar;

@@ -3,7 +3,6 @@ import { useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {AppContext} from "../context/AppContext";
 
-
 function DoctorLogin() {
 const [doctorIdInput, setDoctorIdInput] = useState("");
   const [password, setPassword] = useState("");
@@ -29,6 +28,7 @@ const [doctorIdInput, setDoctorIdInput] = useState("");
   {/*localStorage.setItem("doctorId", doctorId);
   localStorage.setItem("token", "true");
   localStorage.removeItem("patientId"); */}
+  
   // clear patient if doctor logs in
   navigate(`/doctorlogin/${data.doctorId}`);
 } else {
