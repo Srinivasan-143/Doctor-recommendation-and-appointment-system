@@ -163,7 +163,7 @@ disease_to_specialist = {
     "Hyperthyroidism": "endocrinologist",
     "Hypoglycemia": "endocrinologist",
     "Osteoarthristis": "orthopedic-surgeon",
-    "Arthritis": "Rheumarheumatologisttologist",
+    "Arthritis": "rheumatologist",
     "(vertigo) Paroymsal  Positional Vertigo": "neurologist",
     "Acne": "dermatologist",
     "Urinary tract infection": "urologist",

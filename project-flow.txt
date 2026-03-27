@@ -1,0 +1,83 @@
+🚀 Project Flow – SymptoDoc
+🔹 1. User Entry (Patient / Doctor / Admin)
+User opens the SymptoDoc web app
+Role specific login:
+Patient
+Doctor
+Admin
+🔹 2. Registration / Login
+👤 Patient / Doctor:
+Register with:
+ID / Email
+Password (hashed using bcrypt)
+Login using credentials
+🔐 Backend:
+Verifies credentials from login table
+If valid → access granted
+🔹 3. Patient Flow (Core Part)
+🧾 Step 1: Enter Symptoms
+Patient enters symptoms through UI
+
+🤖 Step 2: ML Processing (Python Flask)
+Symptoms sent to ML API
+ML model:
+Predicts disease
+Maps to specialist type
+
+👨‍⚕️ Step 3: Doctor Recommendation
+Backend queries doctor table
+Filters:
+Matching specialization
+Returns:
+Top doctors list
+📅 Step 4: Appointment Booking
+Patient selects doctor
+Sends appointment request
+🔄 Step 5: Appointment Management
+Status:
+Pending
+confirmed
+Rescheduled
+Completed
+Stored in appointment table
+⭐ Step 6: Review Doctor
+After completion:
+Patient gives rating / review
+🔹 4. Doctor Flow
+👨‍⚕️ Login
+Doctor logs in
+📋 Manage Appointments
+View patient requests
+Pending
+confirmed
+Rescheduled
+Completed
+
+🔹 5. Admin Flow
+Add Doctor
+Edit Doctor details
+Remove Patient
+
+🔹 6. Profile Management
+Patient & Doctor can:
+Update profile
+Upload photo
+Edit details
+🔹 7. Database Interaction (MySQL)
+
+Tables used:
+
+patient
+doctor
+login
+doctorlogin
+appointment
+reviews
+🔹 8. Technology Flow
+React (Frontend)
+      ↓
+Node.js + Express (Backend API)
+      ↓
+MySQL Database
+      ↓
+Python Flask (ML Model)
