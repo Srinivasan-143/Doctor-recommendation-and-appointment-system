@@ -11,6 +11,7 @@ const Appointment = () => {
 
     const [data, setData] = useState(null)
     const [loaded, setLoaded] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect( () => {
         fetch(`http://localhost:8081/doctors/${docId}`)
         .then(res => res.json())
@@ -39,67 +40,116 @@ const Appointment = () => {
         };
 
 
-    const handleScheduleAppointment = async () => {
-        const submittedData = {
-            patient_id: patientId,
-            doctor_id: docId,
-            appointment_date: appointmentDate,
-            appointment_time: appointmentTime,
-            appointment_reason: appointmentReason
-        };
+const handleScheduleAppointment = async () => {
 
-        try {
-            const response = await fetch('http://localhost:8081/bookAppointment', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(submittedData),
-            });
-            
-            const data = await response.json();
-            console.log(data); 
-        } catch (err) {
-            console.error(err);
-        }
+    if (isSubmitting) return;
 
-        navigate('/my-appointments')
+    // ✅ First validate
+    if (!appointmentDate || !appointmentTime || !appointmentReason) {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    // ✅ THEN set loading
+    setIsSubmitting(true);
+
+    const submittedData = {
+        patient_id: patientId,
+        doctor_id: docId,
+        appointment_date: appointmentDate,
+        appointment_time: appointmentTime,
+        appointment_reason: appointmentReason
     };
+
+    try {
+        const response = await fetch('http://localhost:8081/bookAppointment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(submittedData),
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        navigate('/my-appointments');
+
+    } catch (err) {
+        console.error(err);
+    } finally {
+        setIsSubmitting(false);
+    }
+};
 
     const availableTimes = (selectedDate) => {
         const times = [];
         const today = new Date();
         const selected = new Date(selectedDate);
     
-        // If the selected date is today, get the current hour and minutes
-        let startHour = 10;  // Default start hour
-        let startMinute = 0;
-    
-        if (selected.toDateString() === today.toDateString()) {
-            // If today, start from the next half-hour slot
-            startHour = today.getHours();
-            startMinute = today.getMinutes() > 30 ? 30 : 0;
-    
-            // If current time is past 9 PM, no available slots for today
-            if (startHour >= 21) {
-                return [];  // No slots available today
-            }
-    
-            // If it's already past the half-hour mark, start from the next hour
-            if (startMinute === 30) {
-                startHour++;
-                startMinute = 0;
-            }
+         // Get doctor available time
+const [fromHour, fromMin] = data[0].available_from.split(":").map(Number);
+const [toHour, toMin] = data[0].available_to.split(":").map(Number);
+
+// Default start time = doctor's start time
+let startHour = fromHour;
+let startMinute = fromMin;
+
+if (selected.toDateString() === today.toDateString()) {
+    const currentHour = today.getHours();
+    const currentMin = today.getMinutes();
+
+    // If current time is already past doctor's end → no slots
+    if (
+        currentHour > toHour ||
+        (currentHour === toHour && currentMin >= toMin)
+    ) {
+        return [];
+    }
+
+    // Start from current time if it's later than doctor's start
+    if (
+        currentHour > startHour ||
+        (currentHour === startHour && currentMin > startMinute)
+    ) {
+        startHour = currentHour;
+        startMinute = currentMin > 30 ? 30 : 0;
+
+        // Move to next slot properly
+        if (startMinute === 30) {
+            startHour++;
+            startMinute = 0;
         }
-    
-        for (let hour = startHour; hour <= 20; hour++) {
-            const formattedHour = hour < 10 ? `0${hour}` : hour; // Formatting hour
-            if (hour === startHour && startMinute === 30) {
-                times.push(`${formattedHour}:30`);  // Start from the next half-hour slot if applicable
-            } else {
-                times.push(`${formattedHour}:00`, `${formattedHour}:30`);  // Add full and half-hour slots
-            }
+    }
+}
+        const formatTime = (time) => {
+        if (!time) return "";
+
+        const [hours, minutes] = time.split(":");
+        let h = parseInt(hours);
+        const ampm = h >= 12 ? "PM" : "AM";
+
+        h = h % 12;
+        h = h ? h : 12; // 0 becomes 12
+
+        return `${h}:${minutes} ${ampm}`;
+        };
+
+        for (let hour = startHour; hour <= toHour; hour++) {
+    const formattedHour = hour < 10 ? `0${hour}` : hour;
+
+    // Add :00 slot only if within limit
+    if (hour < toHour || (hour === toHour && 0 <= toMin)) {
+        if (!(hour === startHour && startMinute === 30)) {
+            times.push(`${formattedHour}:00`);
         }
+    }
+
+    // Add :30 slot only if within limit
+    if (hour < toHour || (hour === toHour && 30 <= toMin)) {
+        times.push(`${formattedHour}:30`);
+    }
+}
     
         return times;
     };
@@ -160,15 +210,25 @@ console.log(data);
                                 <option key={time} value={time}>{time}</option>
                             ))}
                         </select>
+                        <p>
+                        Selected time: {formatTime(appointmentTime)}
+                        </p>
                         <br/>
 
                         <p>Appointment reason</p>
-                        <input type='text' className='border border-zinc-300 rounded w-full p-2 mt-1' onChange={(e) => setAppointmentReason(e.target.value)} value={appointmentReason} placeholder='Enter the reason for your appointment'/>
+                        <input type='text' className='border border-zinc-300 rounded w-full p-2 mt-1' onChange={(e) => setAppointmentReason(e.target.value)} value={appointmentReason} placeholder='Enter the reason for your appointment' required/>
                         <br/>
 
-                        <button onClick={handleScheduleAppointment} className="bg-primary text-white py-2 px-4 ml-2 rounded-xl">
+                        {/*<button onClick={handleScheduleAppointment} className="bg-primary text-white py-2 px-4 ml-2 rounded-xl">
                             Book Appointment
-                        </button>
+                        </button>*/}
+                        <button 
+                        onClick={handleScheduleAppointment} 
+                        disabled={isSubmitting}
+                        className={`bg-primary text-white py-2 px-4 ml-2 rounded-xl ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                        {isSubmitting ? "Booking..." : "Book Appointment"}
+                    </button>
                     </div>
                 </div>
 

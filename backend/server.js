@@ -300,7 +300,7 @@ app.post('/bookAppointment', (request, result) => {
 
 
 //Patient Profile
-app.get('/patientProfile/:id', (request, result) => {
+{/*app.get('/patientProfile/:id', (request, result) => {
     const patientId = request.params.id;
     const sql = "SELECT * FROM Patient WHERE patient_id = ?"
     db.query(sql, [patientId], (err, data) => {
@@ -311,7 +311,37 @@ app.get('/patientProfile/:id', (request, result) => {
             return result.json(data);
         }
     })
-})
+}) */}
+app.get('/patientProfile/:id', (request, result) => {
+    const patientId = request.params.id;
+    const sql = "SELECT * FROM patient WHERE patient_id = ?";
+
+    db.query(sql, [patientId], (err, data) => {
+        if (err) {
+            return result.json(err);
+        } else {
+
+            const formattedData = data.map(row => {
+                let dob = row.date_of_birth;
+
+                // ✅ FIX: convert to local date string WITHOUT timezone shift
+                if (dob) {
+                    const year = dob.getFullYear();
+                    const month = String(dob.getMonth() + 1).padStart(2, '0');
+                    const day = String(dob.getDate()).padStart(2, '0');
+                    dob = `${year}-${month}-${day}`;
+                }
+
+                return {
+                    ...row,
+                    date_of_birth: dob
+                };
+            });
+
+            return result.json(formattedData);
+        }
+    });
+});
 
 //Update patient details(without patientid & email)
 app.put('/updatePatientDetails/:id', (req, res) => {

@@ -21,6 +21,11 @@ const MyProfile = () => {
   }, [patientId]);
 console.log(data)
 console.log(patientId)
+        const formatDOB = (dob) => {
+          if (!dob) return "";
+          const [y, m, d] = dob.split("-");
+          return `${d}-${m}-${y}`;
+        };
   if (!loaded || !data) {
     return <p>Loading profile...</p>;
   }
@@ -51,7 +56,7 @@ console.log(patientId)
           <p>{data.first_name} {data.last_name}</p>
 
           <p className="font-medium">Date of Birth:</p>
-          <p>{new Date(data.date_of_birth).toLocaleDateString()}</p>
+          <p>{formatDOB(data.date_of_birth)}</p>
 
           <p className="font-medium">Gender:</p>
           <p>{data.gender}</p>
