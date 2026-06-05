@@ -7,6 +7,9 @@ import "./navbar.css";
 const Navbar = () => {
       const navigate = useNavigate();
       const { patientId, doctorId, token, setToken, setPatientId, setDoctorId } = useContext(AppContext);
+      //desktop view
+      const [showMenu, setShowMenu] = useState(false);
+      //mobile view
       const [isMenuOpen, setIsMenuOpen] = useState(false);
 
       const handleMenu = () => {
@@ -60,11 +63,12 @@ const Navbar = () => {
       <div className="profile-section">
         {token && patientId ? (
           <div className="profile-dropdown">
-            <img className="profile-img" src={assets.userImage1} alt="" />
-            <img className="dropdown-icon" src={assets.dropdown} alt="" />
-            <div className="dropdown-menu">
-              <p onClick={() => navigate("/my-profile")}>My Profile</p>
-              <p onClick={() => navigate("/my-appointments")}>My Appointment</p>
+            <img className="profile-img" src={assets.userImage1} alt="" onClick={() => setShowMenu(!showMenu)}/>
+            <img className="dropdown-icon" src={assets.dropdown} alt="" onClick={() => setShowMenu(!showMenu)}/>
+             {showMenu && (
+              <div className="dropdown-menu">
+              <p onClick={() => {navigate("/my-profile");setShowMenu(!showMenu);}}>My Profile</p>
+              <p onClick={() => {navigate("/my-appointments");setShowMenu(!showMenu);}}>My Appointment</p>
               <p
                 onClick={() => {
                   setPatientId(null); 
@@ -77,22 +81,25 @@ const Navbar = () => {
                   localStorage.removeItem("admin");
 
                   navigate("/");
+                  setShowMenu(!showMenu);
                 }}
               >
                 Logout
               </p>
-
+              <p style={{display:'flex',justifyContent:'center'}}>
+            <img src={assets.crossicon} className="close-btn" onClick={() => setShowMenu(!showMenu)} style={{backgroundColor:'black',borderRadius:'20px'}}/>
+</p>
             </div>
-            
+            )}
           </div>
-        ) : (
-          <button
-            onClick={() => navigate("/login")}
-            className="create-account-btn"
-          >
-            LOGIN
-          </button>
-        )}
+        ) : !doctorId ? (
+  <button
+    onClick={() => navigate("/login")}
+    className="create-account-btn"
+  >
+    LOGIN
+  </button>
+) : null}
       </div>
 
       
@@ -100,11 +107,12 @@ const Navbar = () => {
       <div className="profile-section">
         {token && doctorId && (
           <div className="profile-dropdown">
-            <img className="profile-img" src={assets.userImage1} alt="" />
-            <img className="dropdown-icon" src={assets.dropdown} alt="" />
-            <div className="dropdown-menu">
-              <p onClick={() => navigate(`/doctorprofile/${doctorId}`)}>My Profile</p>
-              <p onClick={() => navigate(`/doctorlogin/${doctorId}`)}>My Appointment</p>
+            <img className="profile-img" src={assets.userImage1} alt="" onClick={() => setShowMenu(!showMenu)}/>
+            <img className="dropdown-icon" src={assets.dropdown} alt="" onClick={() => setShowMenu(!showMenu)}/>
+             {showMenu && (
+              <div className="dropdown-menu">
+              <p onClick={() => {navigate(`/doctorprofile/${doctorId}`);setShowMenu(!showMenu);}}>My Profile</p>
+              <p onClick={() => {navigate(`/doctorlogin/${doctorId}`);setShowMenu(!showMenu);}}>My Appointment</p>
               <p
                 onClick={() => {
                   setPatientId(null); 
@@ -116,13 +124,16 @@ const Navbar = () => {
                   localStorage.removeItem("token");
                   localStorage.removeItem("admin");
                   navigate("/");
+                  setShowMenu(!showMenu);
                 }}
               >
                 Logout
               </p>
-
+              <p style={{display:'flex',justifyContent:'center'}}>
+            <img src={assets.crossicon} className="close-btn" onClick={() => setShowMenu(!showMenu)} style={{backgroundColor:'black',borderRadius:'20px'}}/>
+             </p>
             </div>
-            
+            )}
           </div>
         )}
       </div>

@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 
-const Doctorsignup = () => {
+const Doctorsignup = ({
+  title = "Create Doctor",
+  buttonText = "Signup",
+  redirectAfterSubmit = true
+}) => {
     const [doctorIdData, setDoctorIdData] = useState(null); 
     const [loaded, setLoaded] = useState(false);
     const navi = useNavigate();
@@ -103,7 +107,12 @@ setFormData({
 });
 
 
-    navi('/doctorlogin');
+    {/*navi('/doctorlogin');*/}
+
+    if (redirectAfterSubmit) {
+          navi('/doctorlogin');
+            }
+
   } catch (err) {
     console.error(err);
     alert("Signup failed");
@@ -128,8 +137,9 @@ return loaded && (
 
         {/* Add Doctor */}
         <div className="border p-4 rounded-md shadow-md">
-          <h2 className="text-xl font-bold mb-4">Create Doctor</h2>
-<p>Your Doctor ID: {doctorIdData || "Loading..."}</p>
+         {/* <h2 className="text-xl font-bold mb-4">Create Doctor</h2>*/}
+          <h2 className="text-xl font-bold mb-4">{title}</h2>
+<p>Doctor ID: {doctorIdData || "Loading..."}</p>
       
           <form onSubmit={addDoctor} className="space-y-4">
              {/* Profile Photo */}
@@ -149,11 +159,7 @@ return loaded && (
                 className="w-full p-2 border rounded"
               />
             
-            <p>Password</p>
-            <input type="password" name="password" placeholder="Enter Password"
-              value={formData.doctor.password} onChange={(e) => handleChange(e, 'doctor')}
-              className="w-full p-2 border rounded" required />
-
+            
             <p>First name</p>
             <input type="text" name="firstName" placeholder="Enter the First Name" value={formData.doctor.firstName} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
             <p>Last name</p>
@@ -179,9 +185,39 @@ return loaded && (
                 <option value="urologist">Urologist</option>
             </select>
             <p>Phone number</p>
+            {/*
             <input type="number" name="phoneNumber" placeholder="Enter the Phone Number" value={formData.doctor.phoneNumber} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
+            */}
+
+            <input
+            className="w-full p-2 border rounded"
+            type="tel"
+            name="phoneNumber"
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+
+              setFormData({
+                ...formData,
+                doctor: {
+                  ...formData.doctor,
+                  phoneNumber: value
+                }
+              });
+            }}
+            value={formData.doctor.phoneNumber}
+            placeholder="Enter the Phone Number"
+            maxLength={10}
+            required
+          />
+
             <p>Email ID</p>
             <input type="email" name="email" placeholder="Enter the Email" value={formData.doctor.email} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
+            
+            <p>Password</p>
+            <input type="password" name="password" placeholder="Enter Password"
+              value={formData.doctor.password} onChange={(e) => handleChange(e, 'doctor')}
+              className="w-full p-2 border rounded" required />
+            
             <p>Available days</p>
             <select name="availableDays" value={formData.doctor.availableDays} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required>
                 <option value="Monday">Monday</option>
@@ -225,7 +261,12 @@ return loaded && (
             <input type="number" name="yearsOfExperience" placeholder="Enter the Years of Experience" value={formData.doctor.yearsOfExperience} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
             <p>Salary</p>
             <input type="number" name="salary" placeholder="Enter the Salary" value={formData.doctor.salary} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
-            <button type='submit' className="bg-primary text-white p-2 rounded">Signup</button>
+            
+            {/*<button type='submit' className="bg-primary text-white p-2 rounded">Signup</button>*/}
+
+            <button type='submit' className="bg-primary text-white p-2 rounded">
+            {buttonText}
+            </button>
             </form>
             
         </div>

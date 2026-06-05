@@ -5,22 +5,27 @@ const About = () => {
     return (
         <div>
             <div className='text-center text-2xl pt-10 text-gray-500 '>
-                <p>ABOUT <span className='text-gray-700 font-medium'>US</span></p>
+                <p style={{color:'black'}}>ABOUT US</p>
             </div>
             <div className='flex flex-col my-10 md:flex-row gap-12'>
                 <img className='w-full md:max-w-[360-px]' src={assets.about} alt=''/>
                 <div className='flex flex-col justify-center gap-6 md:w-3/4 text-sm text-gray-600'>
-                    <p>The Symptoms-Based Doctor Recommendation and Appointment System is an innovative centralized platform that leverages machine learning to recommend doctors by finding the possible disease based on patient-provided symptoms and streamline appointment scheduling with specialists. It is designed with a special focus on recommending top doctors by rating and review by the patients, Overall it reduces time complexity of finding the right specialist and appointments flow</p>
+                    <p style={{textAlign:'justify'}}>
+                        The Symptoms-Based Doctor Recommendation and Appointment System is a web-based platform that helps patients to find suitable medical specialists based on their symptoms.
+                         The system provides personalized doctor recommendations and enables easy appointment booking. 
+                         <br />
+                         The platform connects patients and doctors, simplifying the process of identifying the right specialist and managing appointments efficiently, thereby reducing the time and effort required to find and consult the suitable doctors.
+                        </p>
                     <b className='text-gray-800'>Our Vision</b>
-                    <p><b>Symptom-Driven Recommendations: </b>Patients input their symptoms, and the system intelligently detects possible disease and suggests suitable specialists.
+                    <p><b>Symptom-Driven Doctor Recommendations: </b>Help patients to find the most suitable medical specialists based on their symptoms.
                     <br />
-                    <b>Seamless Appointment Booking:</b> Integrated scheduling with suggested specialists.
+                    <b>Convenient Appointment Booking:</b> Simplify the process of scheduling appointments with recommended doctors.
                     <br />
-                    <b>Role-based access control :</b>provides Role based control for patients,doctors and admin.
+                    <b>Make Healthcare Decisions Easier:</b>Enable patients in choosing doctors through ratings and reviews shared by others.
                     <br />
-                    <b>Inclusive Design:</b> Simple, user-friendly interface tailored for first-time digital healthcare users.
+                    <b>Connect Patients and Doctors Efficiently:</b> A centralized platform that enables smooth interaction between patients and doctors.
                     <br />
-                    <b>Scalable Architecture:</b> Built to expand across regions and handle growing patient-doctor networks efficiently.</p>
+                    </p>
                 </div>
             </div>
         </div>

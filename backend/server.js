@@ -51,6 +51,7 @@ const db = mysql.createConnection({
 //All Doctors
 app.get('/doctors', (request, result) => {
     const sql = "SELECT * FROM Doctor"
+    {/*const sql = "SELECT * FROM Doctor ORDER BY avg_rating DESC, total_reviews DESC";*/}
     db.query(sql, (err, data) => {
         if(err){
             return result.json(err);
@@ -300,6 +301,7 @@ app.post('/bookAppointment', (request, result) => {
 
 
 //Patient Profile
+
 {/*app.get('/patientProfile/:id', (request, result) => {
     const patientId = request.params.id;
     const sql = "SELECT * FROM Patient WHERE patient_id = ?"

@@ -2,7 +2,7 @@ import React, { useState, useEffect ,useRef} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-
+import Doctorsignup from './Doctorsignup'
 
 const Manager = () => {
 
@@ -167,8 +167,19 @@ const formatTime = (time) => {
             </div>
 
 
-        {/* Add Doctor */}
-        <div ref={addoctor} className="border p-4 rounded-md shadow-md">
+        {/* Add signup Doctor 
+        <h2 className="text-xl font-bold mb-4">Add signup Doctor</h2> */}
+        <div ref={addoctor}>
+        <Doctorsignup
+            title="Add Doctor"
+            buttonText="Add Doctor"
+            redirectAfterSubmit={false}
+        />
+        </div>
+        <div className="border p-4 rounded-md shadow-md">
+        
+
+        {/* Add Doctor 
             <h2 className="text-xl font-bold mb-4">Add Doctor</h2>
             <p>Doctor ID: {doctorIdData || "Loading..."}</p>
 
@@ -200,6 +211,8 @@ const formatTime = (time) => {
                 <option value="colorectal-surgeon">Colorectal Surgeon</option>
                 <option value="allergist">Allergist</option>
                 <option value="infectious-disease-specialist">Infectious Disease Specialist</option>
+                
+
                 {/*<option value="general-physician">General Physician</option>
                 <option value="gynecologist">Gynecologist</option>
                 <option value="dermatologist">Dermatologist</option>
@@ -217,7 +230,7 @@ const formatTime = (time) => {
                 <option value="Vascular-Surgeon">Vascular-Surgeon</option>
                 <option value="Rheumatologist">Rheumatologist</option>
                 <option value="Urologist">Urologist</option>
-                */}
+                
 
             </select>
             <p>Phone number</p>
@@ -250,9 +263,12 @@ const formatTime = (time) => {
             <input type="number" name="salary" placeholder="Enter the Salary" value={formData.doctor.salary} onChange={(e) => handleChange(e, 'doctor')} className="w-full p-2 border rounded" required/>
             <button type='submit' className="bg-primary text-white p-2 rounded">Add Doctor</button>
             </form>
+
+            */}
+
             <br/>
             {/* Doctor List */}
-            <h2 ref={alldoctor} className="text-xl font-bold mb-4">Delete Doctor</h2>
+            <h2 ref={alldoctor} className="text-xl font-bold mb-4">Edit / Delete Doctors</h2>
             <div className="mt-4 space-y-2">
             {doctors.map((doctor) => (
                 <div key={doctor.doctor_id} className="flex justify-between items-center">

@@ -208,7 +208,7 @@ const DoctorUpdate = () => {
       </button>
     </form>
 
-    {/* Password form */}
+    {/* Password form 
  <button className="bg-primary text-white w-full py-2 rounded-md mt-4" onClick={pas} style={{display:showpassword?'none':'block'}}>Update Password</button>
    <form onSubmit={handlePasswordSubmit} className="mt-3" style={{display:showpassword?'block':'none'}}> 
    <p>New Password:</p> 
@@ -217,7 +217,7 @@ const DoctorUpdate = () => {
     <button type="submit" className="bg-red-600 text-white w-full py-2 rounded-md mt-2"> Save Password </button>
      <button type="button" onClick={pas} className="bg-gray-400 text-white w-full py-2 rounded-md mt-2" > Cancel </button>
       </form>
- 
+ */}
 </div>
   );
 };

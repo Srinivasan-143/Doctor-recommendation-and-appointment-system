@@ -68,8 +68,7 @@ const Doctors = () => {
                         <div
                             onClick={() => navigate(`/appointment/${item.doctor_id}`)}
                             key={item.doctor_id}
-                            className={`flex flex-col items-center border rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 ${
-                                index === 0 ? "border-green-500 bg-green-50" : "border-blue-200"
+                            className={`flex flex-col items-center border rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 ${speciality && index === 0 ? "border-green-500 bg-green-50" : "border-blue-200"
                             }`}
                         >
                             <br/>
@@ -83,7 +82,7 @@ const Doctors = () => {
                                 alt={`${item.first_name} ${item.last_name}`}                            />
                             <div className='p-4'>
                                 <p>
-                                    {index === 0 && (
+                                    {speciality && index === 0 && (
                                     <p className="ml-2 text-sm text-white bg-black font-bold" style={{borderRadius:'10px', padding:'8px', width:'100%', textAlign:'center'}}>Top Doctor</p>
                                  )}
                                 </p>
