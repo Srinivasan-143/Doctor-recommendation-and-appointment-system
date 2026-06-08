@@ -58,6 +58,12 @@ const formatTime = (time) => {
     
     return loaded && (
         <div>
+            <button
+                onClick={() => navigate(`/reviews/${id}`)}
+                            className="bg-teal-500 text-white rounded px-1 py-1"
+            >
+                View Reviews
+            </button>
             <p className='pb-3 mt-12 font-medium text-zinc-700 border-b'>List of your Appointments</p>
             <div>
                 {   

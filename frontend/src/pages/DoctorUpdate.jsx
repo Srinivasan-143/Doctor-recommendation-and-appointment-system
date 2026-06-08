@@ -134,13 +134,18 @@ const DoctorUpdate = () => {
         </select>
         </div>
 
+        {/*removed  onChange={handleChange} */}
+
         <div className="mt-3">
         <p>Phone Number:</p>
         <input
             type="tel"
             name="phone_number"
             value={formData.phone_number || ''}
-            onChange={handleChange}
+            onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+            setFormData({ ...formData, phone_number: value });
+          }}
             className="border rounded w-full p-2"
         />
         </div>

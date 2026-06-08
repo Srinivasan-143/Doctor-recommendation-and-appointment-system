@@ -20,6 +20,8 @@ import Doctorsignup from './pages/Doctorsignup'
 
 import ProfileUpdate from './pages/ProfileUpdate'
 import DoctorUpdate from './pages/DoctorUpdate'
+import ReviewsPage from './pages/ReviewsPage'
+
 
 const App = () => {
     const docval = localStorage.getItem("doctorId");
@@ -80,6 +82,14 @@ const App = () => {
                     <DoctorUpdate/>
                   
                     } />
+
+                    <Route
+                        path='/reviews/:doctorId'
+                        element={
+                                <ReviewsPage />
+                        }
+                    />
+
             </Routes>
         </div>
     )

@@ -76,7 +76,7 @@ console.log(patientId)
           <p className="font-medium">Emergency Contact number:</p>
           <p className="text-blue-500">{data.emergency_contact}</p>
 
-          <p className="font-medium">Allergies:</p>
+          <p className="font-medium">Symptomps:</p>
           <p>{data.allergies}</p>
 
           <p className="font-medium">Existing medical conditions:</p>

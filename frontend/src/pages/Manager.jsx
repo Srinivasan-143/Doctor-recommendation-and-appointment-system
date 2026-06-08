@@ -157,7 +157,7 @@ const formatTime = (time) => {
             <div style={{display:"flex", justifyContent:'space-evenly'}}>
             {<button onClick={()=>scrollToDoctor(addoctor)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>Add Doctor</button>}
             {<button onClick={()=>scrollToDoctor(alldoctor)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>Edit Doctors</button>}
-            {<button onClick={()=>scrollToDoctor(allpatient)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>Delete Patients</button>}
+            {<button onClick={()=>scrollToDoctor(allpatient)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>View Patients</button>}
              {<button onClick={()=>{
                 localStorage.removeItem("admin");
                 setIsAuthenticated(false);
@@ -268,31 +268,38 @@ const formatTime = (time) => {
 
             <br/>
             {/* Doctor List */}
-            <h2 ref={alldoctor} className="text-xl font-bold mb-4">Edit / Delete Doctors</h2>
-            <div className="mt-4 space-y-2">
+            <h2 ref={alldoctor} className="text-xl font-bold mb-4">Edit Doctors</h2>
+            <div className="mt-4 space-y-6">
             {doctors.map((doctor) => (
                 <div key={doctor.doctor_id} className="flex justify-between items-center">
                 <span>{doctor.first_name} {doctor.last_name}</span>
                 <div>
-                <button className="bg-red-500 text-white p-1 rounded" onClick={() => deleteDoctor(doctor.doctor_id)} style={{border:"5px solid white", borderRadius:"10px"}}>Delete</button>
+                {/*<button className="bg-red-500 text-white p-1 rounded" onClick={() => deleteDoctor(doctor.doctor_id)} style={{border:"5px solid white", borderRadius:"10px"}}>Delete</button>*/}
                 
-                <Link to={`/DoctorUpdate/${doctor.doctor_id}`} style={{backgroundColor:"teal", borderRadius:"20px", color:"white", padding:"10px"}} >Edit Profile</Link>
+                <Link to={`/DoctorUpdate/${doctor.doctor_id}`} style={{
+                    backgroundColor:"teal",
+                    borderRadius:"20px",
+                    color:"white",
+                    padding:"10px 15px"
+                    }} >Edit Doctor</Link>
                 </div>
                 </div>
             ))}
             </div>
+            <br />
              {/* patient List */}
-            <h2 ref={allpatient} className="text-xl font-bold mb-4">Delete Patients</h2>
-            <div className="mt-4 space-y-2">
+            <h2 ref={allpatient} className="text-xl font-bold mb-4">All Patients</h2>
+            <div className="mt-4 space-y-4">
             {patients.map((doctor) => (
                 <div key={doctor.patient_id} className="flex justify-between items-center">
                 <span>{doctor.first_name} {doctor.last_name}</span>
                 <div>
-                <button className="bg-red-500 text-white p-1 rounded" onClick={() => handleDelete(doctor.patient_id)} style={{border:"5px solid white", borderRadius:"10px"}}>Delete</button>
+               {/* <button className="bg-red-500 text-white p-1 rounded" onClick={() => handleDelete(doctor.patient_id)} style={{border:"5px solid white", borderRadius:"10px"}}>Delete</button> */}
                                 </div>
                 </div>
             ))}
             </div>
+            
         </div>
         
         </div>

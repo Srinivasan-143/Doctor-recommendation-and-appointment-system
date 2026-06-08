@@ -799,7 +799,7 @@ app.get('/doctors/specialization/:specialization', (req, res) => {
 });
 
 
-//get reviews for doctor
+//get reviews for doctor(not used)
 app.get('/reviews/doctor/:id', (req, res) => {
     const doctorId = req.params.id;
     const sql = "SELECT * FROM reviews WHERE doctor_id = ? ORDER BY created_at DESC";
@@ -811,6 +811,36 @@ app.get('/reviews/doctor/:id', (req, res) => {
         return res.json(rows);
     });
 });
+
+// Reviews for each doctor (using now)
+app.get('/reviews/:doctorId', (req, res) => {
+    const { doctorId } = req.params;
+
+    const sql = `
+        SELECT
+            r.review_id,
+            r.rating,
+            r.review_text,
+            r.created_at,
+            p.first_name,
+            p.last_name
+        FROM reviews r
+        JOIN patient p ON r.patient_id = p.patient_id
+        WHERE r.doctor_id = ?
+        ORDER BY r.created_at DESC
+    `;
+
+    db.query(sql, [doctorId], (err, result) => {
+        if (err) {
+            return res.status(500).json(err);
+        }
+
+        res.json(result);
+    });
+});
+
+
+
 
 //App Listening on port
 app.listen(8081, () => {

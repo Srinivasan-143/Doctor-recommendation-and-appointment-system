@@ -169,13 +169,21 @@ const handlePasswordSubmit = async (e) => {
     />
   </div>
 
+
+      {/*removed  onChange={handleChange} */}
+
   <div className="mt-3">
     <p>Phone Number:</p>
     <input
       type="tel"
       name="phone_number"
       value={formData.phone_number || ''}
-      onChange={handleChange}
+      onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+              setFormData({ ...formData, phone_number: value });
+            }}
+      
+      maxLength="10"
       className="border rounded w-full p-2"
     />
   </div>
@@ -199,13 +207,20 @@ const handlePasswordSubmit = async (e) => {
     </select>
   </div>
 
+  
+      {/*removed  onChange={handleChange} */}
+
   <div className="mt-3">
     <p>Emergency Contact:</p>
     <input
       type="tel"
       name="emergency_contact"
       value={formData.emergency_contact || ''}
-      onChange={handleChange}
+      onChange={(e) => {
+        const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+        setFormData({ ...formData, emergency_contact: value });
+      }}
+      maxLength="10"
       className="border rounded w-full p-2"
     />
   </div>

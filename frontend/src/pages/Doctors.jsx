@@ -64,7 +64,9 @@ const Doctors = () => {
                 </div>
 
                 {/* Doctors list */}
-<div className='w-2/3 sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-5 px-2'>{doctors.map((item, index) => (
+               <div className='w-2/3 sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-5 px-2'>{doctors.map((item, index) => (
+                            <div key={item.doctor_id}>
+
                         <div
                             onClick={() => navigate(`/appointment/${item.doctor_id}`)}
                             key={item.doctor_id}
@@ -102,8 +104,20 @@ const Doctors = () => {
                                     
                                 </p>
                             </div>
+                            
+                        </div>
+                        <button
+                            onClick={() => navigate(`/reviews/${item.doctor_id}`)}
+                            className="w-full bg-teal-500 text-white rounded"
+                        >
+                            View Reviews
+                        </button>
                         </div>
                     ))}
+                    
+                    <div>
+                        
+                    </div>
                 </div>
             </div>
             <br/>
