@@ -5,15 +5,13 @@ const About = () => {
     return (
         <div>
             <div className='text-center text-2xl pt-10 text-gray-500 '>
-                <p style={{color:'black'}}>ABOUT US</p>
+                <p style={{color:'black'}}>ABOUT</p>
             </div>
-            <div className='flex flex-col my-10 md:flex-row gap-12'>
-                <img className='w-full md:max-w-[360-px]' src={assets.about} alt=''/>
-                <div className='flex flex-col justify-center gap-6 md:w-3/4 text-sm text-gray-600'>
-                    <p style={{textAlign:'justify'}}>
+            <div className='flex flex-col my-10 gap-12 text-justify'>
+<div className='flex flex-col justify-center gap-6 w-full text-gray-600'>
+                      <p>
                         The Symptoms-Based Doctor Recommendation and Appointment System is a web-based platform that helps patients to find suitable medical specialists based on their symptoms.
                          The system provides personalized doctor recommendations and enables easy appointment booking. 
-                         <br />
                          The platform connects patients and doctors, simplifying the process of identifying the right specialist and managing appointments efficiently, thereby reducing the time and effort required to find and consult the suitable doctors.
                         </p>
                     <b className='text-gray-800'>Our Vision</b>
@@ -27,7 +25,28 @@ const About = () => {
                     <br />
                     </p>
                 </div>
+                
             </div>
+
+            <div className='mt-10 border-t'>
+    <h2 className='text-2xl text-center mb-6'>
+        Contact
+    </h2>
+
+    <div className='text-center text-gray-600 space-y-2'>
+        <p>
+            <strong>Email:</strong> symptodoc@gmail.com
+        </p>
+
+        <p>
+            <strong>Phone:</strong> +91 6369680825
+        </p>
+
+        <p>
+            <strong>Address:</strong> Vellore, Tamil Nadu, India
+        </p>
+    </div>
+</div>
         </div>
     )
 }

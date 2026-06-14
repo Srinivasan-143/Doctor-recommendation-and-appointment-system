@@ -278,23 +278,24 @@ app.post('/bookAppointment', (request, result) => {
 
                 }
             })
-            const sql2 = "INSERT INTO Bill VALUES (default, ?, ?, ?, ?);";
+            /*const sql2 = "INSERT INTO Bill VALUES (default, ?, ?, ?, ?);";
             db.query(sql2, [appointment_id, 0, appointment_date, 'pending'], (err, data) => {
                 if (err) {
                     //return result.status(500).json(err);
                     return res.status(500).json({ error: err.message });
 
                 }
-            })
+            }) */
+           return result.status(201).json("success");
         }
-        const sql3 = "INSERT INTO Prescription VALUES (default, ?, ?, ?, ?, ?);";
+        /*const sql3 = "INSERT INTO Prescription VALUES (default, ?, ?, ?, ?, ?);";
             db.query(sql3, [appointment_id, '', '', 'Daily', 0], (err, data) => {
                 if (err) {
                     return result.status(500).json(err);
                 }
                 return result.status(201).json("success");
 
-            })
+            }) */
 
     })
 })
@@ -839,7 +840,43 @@ app.get('/reviews/:doctorId', (req, res) => {
     });
 });
 
+// Admin all appointment
+app.get('/allAppointments', (req, res) => {
 
+    const sql = `
+        SELECT
+            a.appointment_id,
+            a.appointment_date,
+            a.appointment_time,
+            a.appointment_reason,
+            a.status,
+
+            p.patient_id,
+            p.first_name AS patient_first_name,
+            p.last_name AS patient_last_name,
+
+            d.doctor_id,
+            d.first_name AS doctor_first_name,
+            d.last_name AS doctor_last_name,
+            d.specialization
+
+        FROM appointment a
+        JOIN patient p
+            ON a.patient_id = p.patient_id
+        JOIN doctor d
+            ON a.doctor_id = d.doctor_id
+
+        ORDER BY a.appointment_id DESC
+    `;
+
+    db.query(sql, (err, data) => {
+        if(err){
+            return res.status(500).json(err);
+        }
+        return res.json(data);
+    });
+
+});
 
 
 //App Listening on port

@@ -158,6 +158,18 @@ const formatTime = (time) => {
             {<button onClick={()=>scrollToDoctor(addoctor)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>Add Doctor</button>}
             {<button onClick={()=>scrollToDoctor(alldoctor)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>Edit Doctors</button>}
             {<button onClick={()=>scrollToDoctor(allpatient)} style={{backgroundColor:"teal", padding:"5px", color:"white", borderRadius:'20px'}}>View Patients</button>}
+             <button
+                onClick={() => navi('/adminappointments')}
+                style={{
+                backgroundColor:"teal",
+                padding:"5px",
+                color:"white",
+                borderRadius:"20px"
+                }}
+                >
+                View Appointments
+            </button>
+             
              {<button onClick={()=>{
                 localStorage.removeItem("admin");
                 setIsAuthenticated(false);
@@ -272,7 +284,13 @@ const formatTime = (time) => {
             <div className="mt-4 space-y-6">
             {doctors.map((doctor) => (
                 <div key={doctor.doctor_id} className="flex justify-between items-center">
-                <span>{doctor.first_name} {doctor.last_name}</span>
+                <span>{doctor.first_name} {doctor.last_name} 
+                    <span className="ml-4 text-gray-600">
+                    ({doctor.specialization})
+                </span>
+                </span>
+                             
+
                 <div>
                 {/*<button className="bg-red-500 text-white p-1 rounded" onClick={() => deleteDoctor(doctor.doctor_id)} style={{border:"5px solid white", borderRadius:"10px"}}>Delete</button>*/}
                 
@@ -292,10 +310,12 @@ const formatTime = (time) => {
             <div className="mt-4 space-y-4">
             {patients.map((doctor) => (
                 <div key={doctor.patient_id} className="flex justify-between items-center">
-                <span>{doctor.first_name} {doctor.last_name}</span>
-                <div>
-               {/* <button className="bg-red-500 text-white p-1 rounded" onClick={() => handleDelete(doctor.patient_id)} style={{border:"5px solid white", borderRadius:"10px"}}>Delete</button> */}
-                                </div>
+                <span >{doctor.first_name} {doctor.last_name}</span>
+    <span className="text-gray-600 text-sm">
+                    ({doctor.email})
+                
+                </span>
+                
                 </div>
             ))}
             </div>

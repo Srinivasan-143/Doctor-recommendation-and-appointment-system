@@ -44,7 +44,7 @@ const [doctorIdInput, setDoctorIdInput] = useState("");
     <div className="p-8 space-y-8">
       <div style={{display:"flex", justifyContent:"space-between"}}>
       <h2 className="text-xl font-bold mb-4">Doctor Login</h2>
-            <button onClick={handlesignup} className="bg-primary text-white p-2 rounded" >Signup as Doctor</button>
+            {/*<button onClick={handlesignup} className="bg-primary text-white p-2 rounded" >Signup as Doctor</button>*/}
             </div>
       <div  className="space-y-4">
         <p>Doctor Email ID :</p>

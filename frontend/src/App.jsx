@@ -21,7 +21,7 @@ import Doctorsignup from './pages/Doctorsignup'
 import ProfileUpdate from './pages/ProfileUpdate'
 import DoctorUpdate from './pages/DoctorUpdate'
 import ReviewsPage from './pages/ReviewsPage'
-
+import AdminAppointments from './pages/AdminAppointments'
 
 const App = () => {
     const docval = localStorage.getItem("doctorId");
@@ -89,6 +89,10 @@ const App = () => {
                                 <ReviewsPage />
                         }
                     />
+                    <Route
+                        path="/adminappointments"
+                        element={<AdminAppointments />}
+                        />
 
             </Routes>
         </div>

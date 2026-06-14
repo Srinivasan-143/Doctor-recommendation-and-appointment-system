@@ -44,13 +44,13 @@ const handleScheduleAppointment = async () => {
 
     if (isSubmitting) return;
 
-    // ✅ First validate
+    // First validate
     if (!appointmentDate || !appointmentTime || !appointmentReason) {
         alert("Please fill all fields!");
         return;
     }
 
-    // ✅ THEN set loading
+    // THEN set loading
     setIsSubmitting(true);
 
     const submittedData = {

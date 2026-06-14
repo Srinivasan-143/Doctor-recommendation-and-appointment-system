@@ -62,13 +62,29 @@ const Doctors = () => {
                     <p onClick={() => navigate('/doctors/urologist')} className={` sm:w-auto pl-3 py-1.5 pr-16 border rounded cursor-pointer ${speciality === "urologist" ? "bg-indigo-100 text-black" : ""}`}>Urologist</p>
 
                 </div>
-
                 {/* Doctors list */}
-               <div className='w-2/3 sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-5 px-2'>{doctors.map((item, index) => (
-                            <div key={item.doctor_id}>
+               <div className='w-2/3 sm:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-5 px-2'>{doctors.map((item, index) => {
+                const unavailableWords = [
+        "not available",
+        "unavailable",
+        "not",
+        "no",
+        "na"
+        ];
+
+        const isUnavailable = unavailableWords.includes(
+        item.available_days?.trim().toLowerCase()
+        );
+                         return (
+                         <div key={item.doctor_id}>
 
                         <div
-                            onClick={() => navigate(`/appointment/${item.doctor_id}`)}
+                            onClick={() => {
+                            if (!isUnavailable) {
+                                navigate(`/appointment/${item.doctor_id}`);
+                            }
+                            }}
+                            
                             key={item.doctor_id}
                             className={`flex flex-col items-center border rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 ${speciality && index === 0 ? "border-green-500 bg-green-50" : "border-blue-200"
                             }`}
@@ -95,8 +111,20 @@ const Doctors = () => {
                                     )*/}
                                 </p>
                                 <p>Specialization: <b>{item.specialization.toUpperCase()}</b> </p>
-                                <p>Days Available: {item.available_days}</p>
-                                <p>Available Hours: {formatTime(item.available_from)} - {formatTime(item.available_to)}</p>
+
+                                {isUnavailable ? (
+                                <p className="text-red-600 font-bold">
+                                    Doctor Unavailable
+                                </p>
+                                ) : (
+                                <>
+                                    <p>Days Available: {item.available_days}</p>
+                                    <p>
+                                    Available Hours: {formatTime(item.available_from)} - {formatTime(item.available_to)}
+                                    </p>
+                                </>
+                                )}
+                                
                                 <p>Years of Experience: {item.years_of_experience}</p>
                                 <p>Doctor Id: {item.doctor_id}</p>
                                 <p className="text-yellow-600">
@@ -113,7 +141,8 @@ const Doctors = () => {
                             View Reviews
                         </button>
                         </div>
-                    ))}
+                         );
+})}
                     
                     <div>
                         
